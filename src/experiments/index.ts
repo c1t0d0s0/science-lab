@@ -1,6 +1,10 @@
 import type { Level } from '../core/levels';
+import { drainage, flow, groundMissions, groundtemp } from './earth/ground';
+import { earthquake, grains, landMissions, river, strata } from './earth/land';
 import { moon, moonMissions } from './earth/moon';
+import { moonmove, skyMissions, stars4, starsky, sunpath } from './earth/sky';
 import { sunshadow, sunshadowMissions } from './earth/sunshadow';
+import { clouds, daytemp, dew, evaporation, weatherMissions } from './earth/weather';
 import { buoyancy, buoyancyMissions } from './energy/buoyancy';
 import { circuit, circuitMissions } from './energy/circuit';
 import { convex, convexMissions } from './energy/convex';
@@ -19,6 +23,12 @@ import { pulley, pulleyMissions } from './energy/pulley';
 import { slope, slopeMissions } from './energy/slope';
 import { drum, itodenwa, soundMissions } from './energy/sound';
 import { spring, springMissions } from './energy/spring';
+import { asagao, asagaoMissions } from './life/asagao';
+import { birthMissions, medaka, pollination } from './life/birth';
+import { arm, body4Missions, seasons } from './life/body4';
+import { body6Missions, breath, saliva, starch, transpire } from './life/body6';
+import { foodchain, foodchainMissions } from './life/foodchain';
+import { insect, insectMissions, plantlife } from './life/insect';
 import { plant, plantMissions } from './life/plant';
 import { combustion, combustionMissions, gascheck } from './particle/combustion';
 import { dissolve, dissolveMissions } from './particle/dissolve';
@@ -75,10 +85,37 @@ export const EXPERIMENTS: Experiment[] = [
   gasmake,
   gasamount,
   // 生命
+  asagao,
+  insect,
+  plantlife,
+  arm,
+  seasons,
   plant,
+  pollination,
+  medaka,
+  saliva,
+  breath,
+  starch,
+  transpire,
+  foodchain,
   // 地球
   sunshadow,
+  groundtemp,
+  drainage,
+  flow,
+  daytemp,
+  evaporation,
+  dew,
+  moonmove,
+  stars4,
+  river,
+  clouds,
+  strata,
+  grains,
+  earthquake,
   moon,
+  sunpath,
+  starsky,
 ];
 
 export const MISSIONS: Mission[] = [
@@ -114,6 +151,16 @@ export const MISSIONS: Mission[] = [
   ...dissolveMissions,
   ...combustionMissions,
   ...reactionMissions,
+  ...asagaoMissions,
+  ...insectMissions,
+  ...body4Missions,
+  ...birthMissions,
+  ...body6Missions,
+  ...foodchainMissions,
+  ...groundMissions,
+  ...weatherMissions,
+  ...skyMissions,
+  ...landMissions,
 ];
 
 export const FIELDS: readonly Field[] = ['energy', 'particle', 'life', 'earth'];

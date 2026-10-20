@@ -2094,6 +2094,63 @@ rt {
 .fig .btb-blue { fill: #4a90e2; opacity: 0.8; stroke: none; }
 .fig .limewater-cloudy { fill: #e9ecef; stroke: none; }
 .fig .wood-line { stroke: #b07a3c; }
+.fig .morning-glory { fill: #8b6fd6; stroke: var(--ink); stroke-width: 1.2; }
+.fig .bug { fill: #4f6d3a; stroke: var(--ink); stroke-width: 1.4; }
+.fig .bug-part { stroke: var(--ink); stroke-width: 1.4; }
+.fig .bug-part-0 { fill: #f2c94c; }
+.fig .bug-part-1 { fill: #6fcf97; }
+.fig .bug-part-2 { fill: #f2994a; }
+.fig .bug-leg-hl { stroke: var(--red); stroke-width: 2.6; }
+.fig .root { stroke: #9a7b5a; }
+.fig .fruit { fill: #7fca6a; stroke: var(--ink); stroke-width: 1.4; }
+.fig .bone { stroke: #d8cdb8; stroke-width: 12; }
+.fig .joint { fill: #f6f1e6; stroke: var(--ink); stroke-width: 1.4; }
+.fig .muscle { fill: none; stroke: #e58c8c; stroke-width: 10; stroke-linecap: round; opacity: 0.8; }
+.fig .muscle-hl { stroke: #d63c2c; }
+.fig .blossom { fill: #f7c6d4; stroke: var(--ink); stroke-width: 1.2; }
+.fig .autumn-leaf { fill: #e8893a; stroke: var(--ink); stroke-width: 1.2; }
+.fig .sky-spring { fill: #fdf0f4; }
+.fig .sky-summer { fill: #dff1fb; }
+.fig .sky-autumn { fill: #fbf0e0; }
+.fig .sky-winter { fill: #eef1f5; }
+.fig .pond { fill: #9cc9e8; opacity: 0.6; }
+.fig .petal { fill: #ffe36e; stroke: var(--ink); stroke-width: 1.2; }
+.fig .petal-wither { fill: #c9b770; stroke: var(--ink); stroke-width: 1.2; }
+.fig .pistil { fill: #7fca6a; stroke: var(--ink); stroke-width: 1.2; }
+.fig .stamen { fill: #f2994a; stroke: var(--ink); stroke-width: 1.2; }
+.fig .luffa { fill: #6fbf5a; stroke: var(--ink); stroke-width: 1.4; }
+.fig .bag { fill: rgb(255 255 255 / 0.35); stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 4 3; }
+.fig .fish { fill: #c9d2dc; stroke: var(--ink); stroke-width: 1.4; }
+.fig .yolk { fill: #f6d77a; stroke: none; }
+.fig .egg { fill: rgb(255 255 255 / 0.6); stroke: var(--ink); stroke-width: 1.4; }
+.fig .heart { fill: var(--red); stroke: none; }
+.fig .fish-line { stroke: #7d8894; }
+.fig .starch { fill: #f6f1e6; stroke: none; }
+.fig .iodine-blue { fill: #4b3f86; stroke: var(--ink); stroke-width: 1; }
+.fig .iodine-none { fill: #e8c48a; stroke: none; }
+.fig .foil { fill: #dfe5ea; stroke: var(--ink); stroke-width: 1.4; }
+.fig .pop-grass { fill: #7fca6a; }
+.fig .pop-rabbit { fill: #d9c3a5; }
+.fig .pop-fox { fill: #e8893a; }
+.fig .pop-hl { stroke: var(--ink); stroke-width: 2.4; }
+.fig .shadow-area { fill: #3b3d4c; opacity: 0.18; stroke: none; }
+.fig .sand { fill: #ead9b0; stroke: none; }
+.fig .sand-grain { fill: #e3c98f; stroke: var(--ink); stroke-width: 0.8; }
+.fig .soil-grain { fill: #8a6a4a; stroke: none; }
+.fig .cloud { fill: #c9d2dc; stroke: var(--ink); stroke-width: 1.2; }
+.fig .land { fill: #a9d68d; stroke: var(--ink); stroke-width: 1.2; }
+.fig .sea { fill: #9cc9e8; opacity: 0.6; stroke: none; }
+.fig .night-sky { fill: #1f2747; stroke: none; }
+.fig .star-white { fill: #ffffff; stroke: none; }
+.fig .star-red { fill: #ff8a6a; stroke: none; }
+.fig .star-blue { fill: #9cc9ff; stroke: none; }
+.fig .star-faint { fill: #ffffff; opacity: 0.35; stroke: none; }
+.fig .faint-star { stroke: #ffffff; opacity: 0.3; }
+.fig .river { fill: none; stroke: #6fb3e0; stroke-linecap: round; }
+.fig .river-bank { fill: none; stroke: #c9a27a; stroke-width: 40; stroke-linecap: round; }
+.fig .river-flow { fill: none; stroke: #ffffff; stroke-width: 2; opacity: 0.8; }
+.fig .river-line { stroke: #6fb3e0; stroke-width: 4; }
+.fig .deposit { fill: #e3c98f; stroke: var(--ink); stroke-width: 1; }
 
 @media (prefers-color-scheme: dark) {
   .fig .ground { fill: #6e5b44; }

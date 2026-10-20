@@ -5,7 +5,17 @@ import { rngFromString } from '../src/core/rng';
 import type { Trial } from '../src/core/snapshot';
 import { EXPERIMENTS, MISSIONS, experimentById, experimentsFor, missionsFor } from '../src/experiments';
 import { scaleReading } from '../src/experiments/energy/buoyancy';
+import { flowTo, groundTemp, soakTime } from '../src/experiments/earth/ground';
+import { depositKm, erosion, grainShape, pDuration } from '../src/experiments/earth/land';
+import { moonDirection, noonAltitude, starAngle, starLook } from '../src/experiments/earth/sky';
+import { airTemp, cityWeather, dewOn, waterLeft } from '../src/experiments/earth/weather';
 import { voltage } from '../src/experiments/energy/circuit';
+import { asagaoStage } from '../src/experiments/life/asagao';
+import { eggStage, fruitOf } from '../src/experiments/life/birth';
+import { SEASON_TEMP, muscle, seasonState } from '../src/experiments/life/body4';
+import { breathPercent, iodine, leafStarch, waterUptake } from '../src/experiments/life/body6';
+import { trendOf } from '../src/experiments/life/foodchain';
+import { observe, plantStage } from '../src/experiments/life/insect';
 import { emLeftPole } from '../src/experiments/energy/electromagnet';
 import { burn, gasPercent } from '../src/experiments/particle/combustion';
 import { solubility } from '../src/experiments/particle/dissolve';
@@ -183,12 +193,12 @@ describe('実験のきまり', () => {
 
 /** 学年ごとに、かならず遊べる実験 (学習指導要領の単元と、中学受験のテーマ) */
 const UNITS: Partial<Record<Level, string[]>> = {
-  g1: ['magnet', 'float', 'shadow', 'itodenwa'],
+  g1: ['magnet', 'float', 'shadow', 'itodenwa', 'asagao'],
   g2: ['float', 'shadow', 'wind', 'slope', 'ice'],
-  g3: ['magnet', 'poles', 'wind', 'rubber', 'mirror', 'lens', 'drum', 'itodenwa', 'circuit', 'weight', 'sunshadow'],
-  g4: ['circuit', 'motor', 'syringe', 'expansion', 'conduction', 'states'],
-  g5: ['pendulum', 'electromagnet', 'empole', 'monochord', 'heating', 'dissolve', 'plant'],
-  g6: ['lever', 'pulley', 'spring', 'buoyancy', 'capacitor', 'nichrome', 'convex', 'combustion', 'gascheck', 'solution', 'neutralize', 'gasmake', 'gasamount', 'moon'],
+  g3: ['magnet', 'poles', 'wind', 'rubber', 'mirror', 'lens', 'drum', 'itodenwa', 'circuit', 'weight', 'insect', 'plantlife', 'sunshadow', 'groundtemp'],
+  g4: ['circuit', 'motor', 'syringe', 'expansion', 'conduction', 'states', 'arm', 'seasons', 'drainage', 'flow', 'daytemp', 'evaporation', 'dew', 'moonmove', 'stars4'],
+  g5: ['pendulum', 'electromagnet', 'empole', 'monochord', 'heating', 'dissolve', 'plant', 'pollination', 'medaka', 'river', 'clouds'],
+  g6: ['lever', 'pulley', 'spring', 'buoyancy', 'capacitor', 'nichrome', 'convex', 'combustion', 'gascheck', 'solution', 'neutralize', 'gasmake', 'gasamount', 'saliva', 'breath', 'starch', 'transpire', 'foodchain', 'strata', 'grains', 'earthquake', 'moon', 'sunpath', 'starsky'],
 };
 
 describe('エネルギーの実験のきまり', () => {
@@ -338,6 +348,110 @@ describe('粒子の実験のきまり', () => {
   });
 });
 
+describe('生命の実験のきまり', () => {
+  it('アサガオ: みずが ないと めが でず、はなの あとに たねが できる', () => {
+    expect(asagaoStage('no', 10)).toBe('seed');
+    expect(['10', '30', '60', '90'].map((d) => asagaoStage('yes', Number(d)))).toEqual(['sprout', 'vine', 'flower', 'seeds']);
+  });
+
+  it('こん虫: あしは6本で体は3つ。クモは8本・2つ。チョウはさなぎになり、バッタはならない', () => {
+    for (const a of ['butterfly', 'beetle', 'grasshopper', 'dragonfly', 'ant']) {
+      expect(observe(a, 'legs')).toBe('legs6');
+      expect(observe(a, 'body')).toBe('body-three');
+    }
+    expect(observe('spider', 'legs')).toBe('legs8');
+    expect(observe('spider', 'body')).toBe('body-two');
+    expect(observe('butterfly', 'growth')).toBe('growth-pupa');
+    expect(observe('grasshopper', 'growth')).toBe('growth-nopupa');
+    expect([10, 30, 50, 70, 90].map(plantStage)).toEqual(['cotyledon', 'leaves', 'tall', 'flower', 'fruit']);
+  });
+
+  it('うで・季節: 曲げると内側がちぢみ、のばすと外側がちぢむ。冬のカエルは冬みん、冬にツバメはいない', () => {
+    expect(muscle('bend', 'inner')).toBe('contract');
+    expect(muscle('bend', 'outer')).toBe('relax');
+    expect(muscle('extend', 'outer')).toBe('contract');
+    expect(seasonState('frog', 'winter')).toBe('frog-sleep');
+    expect(seasonState('swallow', 'winter')).toBe('swallow-none');
+    expect(SEASON_TEMP.summer).toBeGreaterThan(SEASON_TEMP.winter);
+  });
+
+  it('花から実へ・メダカ: 受粉しためばなだけに実ができる。25℃で約11日でかえり、水温が低いとおそい', () => {
+    expect(fruitOf('female', 'yes')).toBe('fruit');
+    expect(fruitOf('female', 'no')).toBe('wither');
+    expect(fruitOf('male', 'yes')).toBe('wither');
+    expect(eggStage(11, 25)).toBe('hatch');
+    expect(eggStage(10, 25)).not.toBe('hatch');
+    expect(eggStage(11, 15)).not.toBe('hatch');
+  });
+
+  it('人と植物の体: だ液は40℃ででんぷんを変え、はいた息は二酸化炭素が多い。日光ででんぷん、葉から水が出る', () => {
+    expect(iodine('yes', 40)).toBe('none');
+    expect(iodine('no', 40)).toBe('blue');
+    expect(iodine('yes', 5)).toBe('blue');
+    expect(iodine('yes', 80)).toBe('blue');
+    expect(breathPercent('co2', 'out')).toBeGreaterThan(breathPercent('co2', 'in'));
+    expect(breathPercent('oxygen', 'out')).toBeLessThan(breathPercent('oxygen', 'in'));
+    expect(leafStarch('yes')).toBe('blue');
+    expect(leafStarch('no')).toBe('none');
+    expect(waterUptake('yes', 'sun')).toBeGreaterThan(waterUptake('no', 'sun'));
+  });
+
+  it('食べ物のつながり: ウサギがふえると草はへりキツネはふえ、やがてもとにもどる', () => {
+    expect(trendOf('rabbit', 0)).toBe('more');
+    expect(trendOf('grass', 2)).toBe('less');
+    expect(trendOf('fox', 2)).toBe('more');
+    expect(trendOf('rabbit', 4)).toBe('less');
+    expect(trendOf('rabbit', 16)).toBe('same');
+  });
+});
+
+describe('地球の実験のきまり', () => {
+  it('地面・雨水: 日なたは日かげより、昼は朝より温かい。つぶが大きいほど早くしみこみ、水は低いほうへ流れる', () => {
+    expect(groundTemp('sun', '9')).toBeGreaterThan(groundTemp('shade', '9'));
+    expect(groundTemp('sun', '12')).toBeGreaterThan(groundTemp('sun', '9'));
+    expect(soakTime('gravel')).toBeLessThan(soakTime('sand'));
+    expect(soakTime('sand')).toBeLessThan(soakTime('soil'));
+    expect(flowTo('left')).toBe('right');
+  });
+
+  it('天気: 晴れの日は午後2時ごろ最高で変化が大きい。ふたなしで水がへり、冷たいコップに水てき。雲は西から東', () => {
+    const sunny = [6, 8, 10, 12, 14, 16, 18].map((h) => airTemp('sunny', h));
+    expect(Math.max(...sunny)).toBe(airTemp('sunny', 14));
+    expect(Math.max(...sunny) - Math.min(...sunny)).toBeGreaterThan(airTemp('rainy', 14) - airTemp('rainy', 6));
+    expect(waterLeft('no', 6)).toBeLessThan(waterLeft('no', 2));
+    expect(waterLeft('yes', 6)).toBe(100);
+    expect(dewOn('ice')).toBe('drops');
+    expect(dewOn('tap')).toBe('none');
+    expect([1, 2, 3].map((d) => cityWeather('tokyo', d))).toEqual(['sunny', 'sunny', 'rain']);
+    expect(cityWeather('fukuoka', 1)).toBe('rain');
+  });
+
+  it('空: 月は東→南→西。星座の位置は変わるがならび方は同じ。南中高度は夏至が高く北ほど低い。星は1時間15°・1か月30°', () => {
+    expect(['18', '21', '24'].map((t) => moonDirection('full', t))).toEqual(['east', 'southeast', 'south']);
+    expect(['18', '21', '24'].map((t) => moonDirection('half', t))).toEqual(['south', 'southwest', 'west']);
+    expect(starLook('19', 'pos', 'rigel')).not.toBe(starLook('23', 'pos', 'rigel'));
+    expect(starLook('19', 'shape', 'rigel')).toBe(starLook('23', 'shape', 'rigel'));
+    expect(starLook('19', 'color', 'betelgeuse')).not.toBe(starLook('19', 'color', 'rigel'));
+    expect(noonAltitude('summer', 35)).toBe(78.4);
+    expect(noonAltitude('winter', 35)).toBe(31.6);
+    expect(noonAltitude('equinox', 43)).toBeLessThan(noonAltitude('equinox', 26));
+    expect(starAngle('hour', 2)).toBe(30);
+    expect(starAngle('month', 3)).toBe(90);
+  });
+
+  it('大地: 水が多い・急・外側ほどけずられ、内側は積もる。大きいつぶほど河口の近く。火山灰は角ばる。初期微動はきょりに比例', () => {
+    expect(erosion('much', 'gentle', 'outer')).toBeGreaterThan(erosion('little', 'gentle', 'outer'));
+    expect(erosion('little', 'steep', 'straight')).toBeGreaterThan(erosion('little', 'gentle', 'straight'));
+    expect(erosion('much', 'gentle', 'inner')).toBeLessThan(0);
+    expect(depositKm('gravel')).toBeLessThan(depositKm('sand'));
+    expect(depositKm('sand')).toBeLessThan(depositKm('mud'));
+    expect(grainShape('ash')).toBe('angular');
+    expect(grainShape('river')).toBe('round');
+    expect(pDuration(120)).toBe(2 * pDuration(60));
+    expect(pDuration(180)).toBe(30);
+  });
+});
+
 /** そのミッションを、調べる条件だけを変えながら実験したときの記録 */
 function playMission(m: Mission): Trial[] {
   const exp = experimentById(m.exp)!;
@@ -412,6 +526,9 @@ describe('ミッション', () => {
       'syringe-air': 'down',
       'syringe-water': 'flat',
       'heating-calc': 'down',
+      'quake-double': 'up',
+      'star-hour': 'up',
+      'drain-fast': 'up',
     };
     for (const [id, dir] of Object.entries(expected)) {
       const m = MISSIONS.find((x) => x.id === id)!;
@@ -439,10 +556,11 @@ describe('ミッション', () => {
     }
   });
 
-  it('どの学年にも、4つ以上の実験と8つ以上のミッションがある', () => {
+  it('1・2年は5つ以上の実験と9つ以上のミッション、3〜6年は8つ以上の実験と15以上のミッションがある', () => {
     for (const level of LEVELS) {
-      expect(experimentsFor(level).length, level).toBeGreaterThanOrEqual(4);
-      expect(missionsFor(level).length, level).toBeGreaterThanOrEqual(8);
+      const low = level === 'g1' || level === 'g2';
+      expect(experimentsFor(level).length, level).toBeGreaterThanOrEqual(low ? 5 : 8);
+      expect(missionsFor(level).length, level).toBeGreaterThanOrEqual(low ? 9 : 15);
     }
   });
 
