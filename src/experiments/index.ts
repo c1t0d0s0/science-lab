@@ -5,7 +5,7 @@ import { buoyancy, buoyancyMissions } from './energy/buoyancy';
 import { circuit, circuitMissions } from './energy/circuit';
 import { convex, convexMissions } from './energy/convex';
 import { capacitor, electricityMissions, nichrome } from './energy/electricity';
-import { electromagnet, electromagnetMissions } from './energy/electromagnet';
+import { electromagnet, electromagnetMissions, empole, empoleMissions } from './energy/electromagnet';
 import { lens, lensMissions } from './energy/lens';
 import { lever, leverMissions } from './energy/lever';
 import { lightMissions, mirror, shadow } from './energy/light';
@@ -20,9 +20,16 @@ import { slope, slopeMissions } from './energy/slope';
 import { drum, itodenwa, soundMissions } from './energy/sound';
 import { spring, springMissions } from './energy/spring';
 import { plant, plantMissions } from './life/plant';
+import { combustion, combustionMissions, gascheck } from './particle/combustion';
+import { dissolve, dissolveMissions } from './particle/dissolve';
 import { float, floatMissions } from './particle/float';
 import { heating, heatingMissions } from './particle/heating';
+import { ice, iceMissions } from './particle/ice';
+import { gasamount, gasmake, neutralize, reactionMissions } from './particle/reaction';
 import { solution, solutionMissions } from './particle/solution';
+import { syringe, syringeMissions } from './particle/syringe';
+import { conduction, expansion, states, thermalMissions } from './particle/thermal';
+import { weight, weightMissions } from './particle/weight';
 import type { Experiment, Field, Mission } from './types';
 
 /** 全部の実験。学年のページでは、分野ごとに、この順でならべる */
@@ -42,6 +49,7 @@ export const EXPERIMENTS: Experiment[] = [
   motor,
   pendulum,
   electromagnet,
+  empole,
   monochord,
   lever,
   pulley,
@@ -52,8 +60,20 @@ export const EXPERIMENTS: Experiment[] = [
   convex,
   // 粒子
   float,
+  ice,
+  weight,
+  syringe,
+  expansion,
+  conduction,
+  states,
   heating,
+  dissolve,
+  combustion,
+  gascheck,
   solution,
+  neutralize,
+  gasmake,
+  gasamount,
   // 生命
   plant,
   // 地球
@@ -86,6 +106,14 @@ export const MISSIONS: Mission[] = [
   ...buoyancyMissions,
   ...electricityMissions,
   ...convexMissions,
+  ...empoleMissions,
+  ...iceMissions,
+  ...weightMissions,
+  ...syringeMissions,
+  ...thermalMissions,
+  ...dissolveMissions,
+  ...combustionMissions,
+  ...reactionMissions,
 ];
 
 export const FIELDS: readonly Field[] = ['energy', 'particle', 'life', 'earth'];

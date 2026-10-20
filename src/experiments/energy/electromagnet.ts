@@ -129,3 +129,82 @@ export const electromagnetMissions: Mission[] = [
     ],
   },
 ];
+
+// ---- 電磁石の極 ----
+
+/** 電磁石の左はしの極。電流の向きを反対にすると、N極とS極が入れかわる */
+export function emLeftPole(direction: string): 'N' | 'S' {
+  return direction === 'reverse' ? 'S' : 'N';
+}
+
+function compass(x: number, y: number, pointLeft: boolean | null): string {
+  // N 極 (赤) が電磁石の S 極に引きつけられる。null なら北 (上) を指す
+  const rot = pointLeft === null ? 0 : pointLeft ? -90 : 90;
+  return group(x, y, `<circle class="box" cx="0" cy="0" r="18"/><g transform="rotate(${rot})"><path class="pole-n" d="M0 -14L4 0H-4Z"/><path class="pole-s" d="M0 14L4 0H-4Z"/></g>`);
+}
+
+function emPoleScene(c: Record<string, number | string>, result: number | string | null, p: number): string {
+  const left = result === null ? null : emLeftPole(String(c.direction));
+  const on = result !== null && p > 0.2;
+  const loops = Array.from({ length: 10 }, (_, i) => path(`M${94 + i * 13} 74Q${101 + i * 13} 90 ${94 + i * 13} 106`, 'ln coil')).join('');
+  // 左はしが N 極なら、左の方位磁針は S 極が引かれて N 極が左 (外) を向き、
+  // 右はし (S 極) の方位磁針は N 極が引かれて左 (電磁石のほう) を向く。どちらも N 極は左を向く
+  const needle = on ? left === 'N' : null;
+  return fig(
+    320,
+    210,
+    `電流の向きを${c.direction === 'reverse' ? '反対' : 'ふつう'}にした電磁石の両はしに方位磁針を置く`,
+    rect(84, 82, 152, 16, 'iron', 3),
+    loops,
+    path('M94 106V170H140M226 106V170H180', 'ln wire'),
+    group(160, 170, rect(-20, -9, 40, 18, 'battery', 3), c.direction === 'reverse' ? rect(-25, -4, 5, 8, 'battery-tip', 1) : rect(20, -4, 5, 8, 'battery-tip', 1)),
+    compass(50, 90, needle),
+    compass(270, 90, needle),
+    on && p >= 1 ? text(84, 60, `${left}極`, { cls: 'result-yes' }) + text(236, 60, `${left === 'N' ? 'S' : 'N'}極`, { cls: 'result-yes' }) : '',
+  );
+}
+
+export const empole: Experiment = {
+  id: 'empole',
+  field: 'energy',
+  label: '電磁石(でんじしゃく)の極(きょく)',
+  summary: '電流の向きを変えて、電磁石のN極・S極を方位磁針で調べよう',
+  setup: '鉄しんを入れたコイルをかん電池につないで電磁石にし、両はしに方位磁針を置きます。方位磁針のはりの向きから、電磁石のどちらのはしがN極かを調べます。かん電池の向きを反対にすると、電流の向きが反対になります。',
+  variables: [
+    {
+      key: 'direction',
+      kind: 'choice',
+      label: '電流(でんりゅう)の向き',
+      options: [
+        { value: 'normal', label: 'ふつう' },
+        { value: 'reverse', label: '反対(はんたい)' },
+      ],
+      initial: 'normal',
+    },
+  ],
+  measure: {
+    kind: 'category',
+    label: '電磁石の左はし',
+    options: [
+      { value: 'N', label: 'N極' },
+      { value: 'S', label: 'S極' },
+    ],
+  },
+  simulate: (c) => emLeftPole(String(c.direction ?? 'normal')),
+  scene: emPoleScene,
+  duration: 1000,
+};
+
+export const empoleMissions: Mission[] = [
+  {
+    id: 'empole-reverse',
+    exp: 'empole',
+    levels: grades(5),
+    question: '電流(でんりゅう)の向きを反対にすると、電磁石(でんじしゃく)のN極とS極は？',
+    choices: ['入れかわる', '変わらない', 'なくなる'],
+    answer: 0,
+    target: 'direction',
+    need: { key: 'direction', distinct: 2 },
+    finding: '電磁石にも、棒磁石と同じようにN極とS極がある。電流の向きを反対にすると、N極とS極が入れかわる。',
+  },
+];

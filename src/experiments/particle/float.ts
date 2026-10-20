@@ -79,7 +79,7 @@ export const floatMissions: Mission[] = [
   {
     id: 'float-heavy',
     exp: 'float',
-    levels: grades(1, 2),
+    levels: grades(1),
     question: 'おもい ものは、かならず みずに しずむ？',
     choices: ['おもい ものは しずむ', 'おもくても うく ものが ある'],
     answer: 1,
@@ -91,7 +91,7 @@ export const floatMissions: Mission[] = [
   {
     id: 'float-foil',
     exp: 'float',
-    levels: grades(1, 2),
+    levels: grades(2),
     question: 'おなじ アルミはく。まるめた ときと ふねの かたちの とき、どうなる？',
     choices: ['どちらも しずむ', 'どちらも うく', 'かたちで ちがう'],
     answer: 2,
@@ -104,7 +104,7 @@ export const floatMissions: Mission[] = [
   {
     id: 'float-wood',
     exp: 'float',
-    levels: grades(1, 2),
+    levels: grades(1),
     question: 'きの つみきは、みずに うく？ しずむ？',
     choices: ['うく', 'しずむ'],
     answer: 0,

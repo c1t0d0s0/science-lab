@@ -156,7 +156,7 @@ export const circuitMissions: Mission[] = [
   {
     id: 'circuit-loop',
     exp: 'circuit',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: '豆電球(まめでんきゅう)に明かりがつくのは、どんなときかな？',
     choices: ['かん電池の+きょくだけにつないだとき', 'かん電池・豆電球・どう線が1つのわになったとき', 'どう線が1か所でもつながっていれば、いつでも'],
     answer: 1,
@@ -169,7 +169,7 @@ export const circuitMissions: Mission[] = [
   {
     id: 'circuit-conductor',
     exp: 'circuit',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: '回路(かいろ)のとちゅうにつないだとき、明かりがつくのはどれ？',
     choices: ['鉄くぎ・アルミはく・10円玉（金(きん)ぞく）', 'わりばし・消しゴム', '全部つく', 'どれもつかない'],
     answer: 0,

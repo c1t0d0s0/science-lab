@@ -2075,6 +2075,25 @@ rt {
 .fig .nichrome { stroke: #8a5a3a; }
 .fig .heat-glow { stroke: #ff7a3d; stroke-width: 6; }
 .fig .screen-line { stroke: #9aa6b2; }
+.fig .ice { fill: #e3f3fb; stroke: #7fb3d1; stroke-width: 1.6; }
+.fig .clay { fill: #c9a27a; stroke: var(--ink); stroke-width: 1.4; }
+.fig .air-fill { fill: rgb(220 236 248 / 0.5); stroke: none; }
+.fig .hot-bath { fill: #f6b9a0; opacity: 0.6; stroke: none; }
+.fig .cold-bath { fill: #bfe1f3; opacity: 0.8; stroke: none; }
+.fig .hot-water { fill: #f3c2a8; opacity: 0.7; stroke: none; }
+.fig .soap { fill: rgb(255 255 255 / 0.6); stroke: #9a6fd6; stroke-width: 1.6; }
+.fig .warm-ink { fill: #f08a7a; stroke: none; }
+.fig .cold-ink { fill: #7fa9e8; stroke: none; }
+.fig .smoke { stroke: var(--muted); }
+.fig .crystal { fill: #fff; stroke: #4a90c8; stroke-width: 0.8; }
+.fig .glass-jar { fill: rgb(220 236 248 / 0.35); stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+.fig .tube-o2 { fill: #c08fd6; stroke: none; }
+.fig .tube-co2 { fill: #f0a050; stroke: none; }
+.fig .btb-yellow { fill: #f3d64e; opacity: 0.8; stroke: none; }
+.fig .btb-green { fill: #6fbf5a; opacity: 0.8; stroke: none; }
+.fig .btb-blue { fill: #4a90e2; opacity: 0.8; stroke: none; }
+.fig .limewater-cloudy { fill: #e9ecef; stroke: none; }
+.fig .wood-line { stroke: #b07a3c; }
 
 @media (prefers-color-scheme: dark) {
   .fig .ground { fill: #6e5b44; }

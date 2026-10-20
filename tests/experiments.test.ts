@@ -1,11 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { initialConditions, readiness, shownVariables } from '../src/core/lab';
+import { initialConditions, readiness, shownVariables, trend } from '../src/core/lab';
 import { LEVELS, modeOf, type Level } from '../src/core/levels';
 import { rngFromString } from '../src/core/rng';
 import type { Trial } from '../src/core/snapshot';
 import { EXPERIMENTS, MISSIONS, experimentById, experimentsFor, missionsFor } from '../src/experiments';
 import { scaleReading } from '../src/experiments/energy/buoyancy';
 import { voltage } from '../src/experiments/energy/circuit';
+import { emLeftPole } from '../src/experiments/energy/electromagnet';
+import { burn, gasPercent } from '../src/experiments/particle/combustion';
+import { solubility } from '../src/experiments/particle/dissolve';
+import { meltTime } from '../src/experiments/particle/ice';
+import { btb, gasTest, hydrogen, residue } from '../src/experiments/particle/reaction';
+import { syringeVolume } from '../src/experiments/particle/syringe';
+import { volumeChange, warming, waterState } from '../src/experiments/particle/thermal';
+import { massOf } from '../src/experiments/particle/weight';
 import { imageDistance, imageOf } from '../src/experiments/energy/convex';
 import { glowTime, heatRise } from '../src/experiments/energy/electricity';
 import { spotTemp } from '../src/experiments/energy/lens';
@@ -26,7 +34,8 @@ import type { Experiment, Mission, Variable } from '../src/experiments/types';
 import { assertWellFormed } from './helpers';
 
 const valuesOf = (v: Variable) => (v.kind === 'range' ? range(v.min, v.max, v.step) : v.options.map((o) => o.value));
-const range = (min: number, max: number, step: number) => Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + i * step);
+const range = (min: number, max: number, step: number) =>
+  Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => Number((min + i * step).toFixed((String(step).split('.')[1] ?? '').length)));
 const sim = (exp: Experiment, c: Record<string, number | string>) => exp.simulate({ ...initialConditions(exp), ...c });
 
 describe('実験のしかた', () => {
@@ -175,11 +184,11 @@ describe('実験のきまり', () => {
 /** 学年ごとに、かならず遊べる実験 (学習指導要領の単元と、中学受験のテーマ) */
 const UNITS: Partial<Record<Level, string[]>> = {
   g1: ['magnet', 'float', 'shadow', 'itodenwa'],
-  g2: ['float', 'shadow', 'wind', 'slope'],
-  g3: ['magnet', 'poles', 'wind', 'rubber', 'mirror', 'lens', 'drum', 'itodenwa', 'circuit', 'sunshadow'],
-  g4: ['circuit', 'motor'],
-  g5: ['pendulum', 'electromagnet', 'monochord', 'plant', 'heating'],
-  g6: ['lever', 'pulley', 'spring', 'buoyancy', 'capacitor', 'nichrome', 'convex', 'solution', 'moon'],
+  g2: ['float', 'shadow', 'wind', 'slope', 'ice'],
+  g3: ['magnet', 'poles', 'wind', 'rubber', 'mirror', 'lens', 'drum', 'itodenwa', 'circuit', 'weight', 'sunshadow'],
+  g4: ['circuit', 'motor', 'syringe', 'expansion', 'conduction', 'states'],
+  g5: ['pendulum', 'electromagnet', 'empole', 'monochord', 'heating', 'dissolve', 'plant'],
+  g6: ['lever', 'pulley', 'spring', 'buoyancy', 'capacitor', 'nichrome', 'convex', 'combustion', 'gascheck', 'solution', 'neutralize', 'gasmake', 'gasamount', 'moon'],
 };
 
 describe('エネルギーの実験のきまり', () => {
@@ -259,6 +268,76 @@ describe('エネルギーの実験のきまり', () => {
   });
 });
 
+describe('粒子の実験のきまり', () => {
+  it('こおり: てで にぎると いちばん はやく、ちいさく わると はやく とける', () => {
+    expect(meltTime('hand', 'big')).toBeLessThan(meltTime('sun', 'big'));
+    expect(meltTime('sun', 'big')).toBeLessThan(meltTime('shade', 'big'));
+    expect(meltTime('shade', 'small')).toBeLessThan(meltTime('shade', 'big'));
+  });
+
+  it('物と重さ: 形を変えても同じで、同じ体積では鉄がいちばん重い', () => {
+    const w = experimentById('weight')!;
+    const shapes = ['ball', 'flat', 'long', 'pieces'].map((shape) => sim(w, { material: 'clay', shape }));
+    expect(new Set(shapes).size).toBe(1);
+    expect(massOf('iron')).toBeGreaterThan(massOf('alu'));
+    expect(massOf('alu')).toBeGreaterThan(massOf('wood'));
+  });
+
+  it('空気と水: 空気はおしちぢめられ、水はちぢまない', () => {
+    expect(syringeVolume('air', 'strong')).toBeLessThan(syringeVolume('air', 'weak'));
+    expect(syringeVolume('air', 'weak')).toBeLessThan(syringeVolume('air', 'none'));
+    expect(syringeVolume('water', 'strong')).toBe(syringeVolume('water', 'none'));
+  });
+
+  it('温度と体積・温まり方: 空気 > 水 > 金ぞく。金ぞくは熱したところから、水と空気は上から', () => {
+    expect(volumeChange('air', 'hot')).toBeGreaterThan(volumeChange('water', 'hot'));
+    expect(volumeChange('water', 'hot')).toBeGreaterThan(volumeChange('metal', 'hot'));
+    expect(volumeChange('air', 'cold')).toBeLessThan(0);
+    expect(volumeChange('metal', 'room')).toBe(0);
+    expect(warming('metal', 'top')).toBe('from-heat');
+    expect(warming('water', 'bottom')).toBe('whole');
+    expect(warming('air', 'top')).toBe('top-only');
+  });
+
+  it('水のすがた: 100℃でふっとうして上がらず、こおっている間は0℃', () => {
+    expect(waterState('heat', 8)).toBe(100);
+    expect(waterState('heat', 16)).toBe(100);
+    expect(waterState('heat', 4)).toBe(60);
+    expect([6, 8, 10].map((m) => waterState('cool', m))).toEqual([0, 0, 0]);
+    expect(waterState('cool', 14)).toBeLessThan(0);
+  });
+
+  it('とけ方: 水の量に比例し、ミョウバンは温度で大きくふえ、食塩はほとんど変わらない', () => {
+    expect(solubility('salt', 100, 20)).toBeCloseTo(2 * solubility('salt', 50, 20), 6);
+    expect(solubility('alum', 50, 60)).toBeGreaterThan(4 * solubility('alum', 50, 20));
+    expect(solubility('salt', 50, 60) / solubility('salt', 50, 20)).toBeLessThan(1.1);
+    expect(Math.round((solubility('alum', 100, 60) - solubility('alum', 100, 20)) * 10) / 10).toBe(46);
+  });
+
+  it('燃え方: 上と下にすき間があると燃え続け、酸素ではげしく燃える。燃えると酸素がへり二酸化炭素がふえる', () => {
+    expect(['none', 'top', 'bottom', 'both'].map((g) => burn(g, 'air'))).toEqual(['soon', 'later', 'soon', 'keep']);
+    expect(burn('none', 'oxygen')).toBe('bright');
+    expect(burn('both', 'co2')).toBe('soon');
+    expect(gasPercent('oxygen', 'after')).toBeLessThan(gasPercent('oxygen', 'before'));
+    expect(gasPercent('oxygen', 'after')).toBeGreaterThan(0);
+    expect(gasPercent('co2', 'after')).toBeGreaterThan(gasPercent('co2', 'before'));
+  });
+
+  it('中和・気体: 10mLで中性。中和すると食塩。気体は線香・石灰水・マッチで見分けられ、水素は0.4gで頭打ち', () => {
+    expect([0, 8, 10, 12].map(btb)).toEqual(['yellow', 'yellow', 'green', 'blue']);
+    expect([0, 10, 20].map(residue)).toEqual(['none', 'salt', 'salt-naoh']);
+    expect(gasTest('mno2', 'incense')).toBe('burn');
+    expect(gasTest('limestone', 'limewater')).toBe('cloudy');
+    expect(gasTest('alhcl', 'match')).toBe('pop');
+    expect(hydrogen(0.3)).toBe(3 * hydrogen(0.1));
+    expect(hydrogen(0.6)).toBe(hydrogen(0.4));
+  });
+
+  it('電磁石の極: 電流の向きを反対にすると入れかわる', () => {
+    expect(emLeftPole('normal')).not.toBe(emLeftPole('reverse'));
+  });
+});
+
 /** そのミッションを、調べる条件だけを変えながら実験したときの記録 */
 function playMission(m: Mission): Trial[] {
   const exp = experimentById(m.exp)!;
@@ -326,14 +405,26 @@ describe('ミッション', () => {
       'mono-tension': 'up',
       'nichrome-length': 'down',
       'lens-spot': 'up',
+      'dissolve-water': 'up',
+      'dissolve-temp-alum': 'up',
+      'dissolve-temp-salt': 'flat',
+      'expansion-air': 'up',
+      'syringe-air': 'down',
+      'syringe-water': 'flat',
+      'heating-calc': 'down',
     };
     for (const [id, dir] of Object.entries(expected)) {
       const m = MISSIONS.find((x) => x.id === id)!;
       const t = playMission({ ...m, noise: false });
-      const first = t[0].v as number;
-      const last = t[t.length - 1].v as number;
-      const got = last > first ? 'up' : last < first ? 'down' : 'flat';
-      expect(got, id).toBe(dir);
+      // 調べる条件を大きくしたときの変わり方 (アプリの自由研究と同じ判定。小さな差は「変わらない」)
+      expect(trend(t, m.need.key), id).toBe(dir);
+    }
+  });
+
+  it('1年と2年、3年と4年は、ちがうミッションで遊ぶ', () => {
+    for (const [a, b] of [['g1', 'g2'], ['g3', 'g4']] as const) {
+      const shared = missionsFor(a).filter((m) => m.levels.includes(b)).map((m) => m.id);
+      expect(shared, `${a} と ${b}`).toEqual([]);
     }
   });
 

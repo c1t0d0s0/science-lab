@@ -19,15 +19,18 @@ const R = 14;
 const T = 18;
 const B = 44;
 
-/** 0 から始まる、きりのよい目もり */
-function niceTicks(max: number): number[] {
-  if (max <= 0) return [0, 1];
-  const raw = max / 4;
+/** きりのよい目もり。0 をふくみ、マイナスの値 (氷の温度など) があれば下にのばす */
+function niceTicks(min: number, max: number): number[] {
+  const lo = Math.min(0, min);
+  const hi = Math.max(0, max);
+  if (hi - lo <= 0) return [0, 1];
+  const raw = (hi - lo) / 4;
   const mag = 10 ** Math.floor(Math.log10(raw));
   const step = [1, 2, 2.5, 5, 10].map((k) => k * mag).find((s) => s >= raw) ?? raw;
+  const start = Math.floor(lo / step + 1e-9) * step;
   const ticks: number[] = [];
-  for (let v = 0; v <= max + step * 0.001; v += step) ticks.push(Math.round(v * 1000) / 1000);
-  if (ticks[ticks.length - 1] < max) ticks.push(Math.round((ticks[ticks.length - 1] + step) * 1000) / 1000);
+  for (let v = start; v <= hi + step * 0.001; v += step) ticks.push(Math.round(v * 1000) / 1000);
+  if (ticks[ticks.length - 1] < hi) ticks.push(Math.round((ticks[ticks.length - 1] + step) * 1000) / 1000);
   return ticks;
 }
 
@@ -47,9 +50,10 @@ export function resultChart(opts: {
   const { series, digits } = opts;
   const numeric = series.every((s) => typeof s.x === 'number');
   const all = series.flatMap((s) => s.values);
-  const ticks = niceTicks(Math.max(...all, 0));
-  const top = ticks[ticks.length - 1] || 1;
-  const y = (v: number) => H - B - (v / top) * (H - B - T);
+  const ticks = niceTicks(Math.min(...all), Math.max(...all));
+  const top = ticks[ticks.length - 1];
+  const bottom = ticks[0];
+  const y = (v: number) => H - B - ((v - bottom) / (top - bottom || 1)) * (H - B - T);
   const xs = numeric ? (series.map((s) => s.x) as number[]) : [];
   const minX = numeric ? Math.min(...xs) : 0;
   const maxX = numeric ? Math.max(...xs) : 0;
@@ -60,7 +64,7 @@ export function resultChart(opts: {
   const grid = ticks
     .map((t) => line(L, y(t), W - R, y(t), 'grid-line') + text(L - 6, y(t) + 4, fmt(t, Number.isInteger(t) ? 0 : 1), { anchor: 'end', cls: 'tiny axis-text' }))
     .join('');
-  const axes = line(L, T - 4, L, H - B, 'axis') + line(L, H - B, W - R, H - B, 'axis');
+  const axes = line(L, T - 4, L, H - B, 'axis') + line(L, y(0), W - R, y(0), 'axis');
   // 横じくの文字は、重ならないよう間引く (数の条件は単位をとって、じくの名前のほうに単位を書く)
   const every = Math.ceil(series.length / Math.max(1, Math.floor((W - L - R) / 46)));
   const xTicks = series
@@ -75,8 +79,10 @@ export function resultChart(opts: {
     marks += series
       .map((s, i) => {
         const bw = Math.min(36, band * 0.5);
-        const h = H - B - y(s.mean);
-        return h > 0 ? rect(x(s, i) - bw / 2, y(s.mean), bw, h, 'series-bar', 4) : '';
+        // 棒は 0 の線から、平均の値までのばす (マイナスなら下向き)
+        const y0 = y(0);
+        const h = Math.abs(y0 - y(s.mean));
+        return h > 0 ? rect(x(s, i) - bw / 2, Math.min(y0, y(s.mean)), bw, h, 'series-bar', 4) : '';
       })
       .join('');
   }

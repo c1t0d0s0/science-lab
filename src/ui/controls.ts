@@ -52,7 +52,9 @@ export function conditionPanel(opts: {
         'aria-valuetext': `${value}${v.unit}`,
       });
       const set = (n: number) => {
-        const next = Math.min(v.max, Math.max(v.min, n));
+        // 0.1 ずつ動かすときに 0.30000000000000004 のようにならないよう、目もりの細かさでまるめる
+        const digits = (String(v.step).split('.')[1] ?? '').length;
+        const next = Number(Math.min(v.max, Math.max(v.min, n)).toFixed(digits));
         input.value = String(next);
         out.textContent = `${next}${v.unit}`;
         input.setAttribute('aria-valuetext', `${next}${v.unit}`);

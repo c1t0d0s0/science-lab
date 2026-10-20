@@ -88,20 +88,6 @@ export const heating: Experiment = {
 
 export const heatingMissions: Mission[] = [
   {
-    id: 'heating-boil',
-    exp: 'heating',
-    levels: grades(4, 5),
-    question: '水(みず)をあたため続(つづ)けると、温度(おんど)はどうなる？',
-    choices: ['いつまでも上がり続ける', '100℃近くで上がらなくなる', 'とちゅうから下がる'],
-    answer: 1,
-    target: 'time',
-    show: ['time'],
-    start: { water: 100, fire: 'strong', time: 2 },
-    need: { key: 'time', distinct: 5, among: [2, 4, 6, 8, 10, 12] },
-    finding: '水は、あたためると温度が上がるが、100℃近くになるとふっとうし、あたため続けても温度は上がらなくなる。',
-    hint: '2分、4分、6分…と、2分ずつ長くして、温度の変わり方をグラフで見よう',
-  },
-  {
     id: 'heating-amount',
     exp: 'heating',
     levels: grades(5),
@@ -125,5 +111,19 @@ export const heatingMissions: Mission[] = [
     start: { water: 100, fire: 'weak', time: 3 },
     need: { key: 'fire', distinct: 3 },
     finding: '火が強いほど、同じ時間で温度は大きく上がる。',
+  },
+  {
+    id: 'heating-calc',
+    exp: 'heating',
+    levels: grades(5),
+    exam: true,
+    question: '中火で3分あたためると、水100mLは20℃から44℃になった。水50mLを中火で3分あたためると何℃になる？',
+    choices: ['68℃', '44℃', '32℃', '88℃'],
+    answer: 0,
+    target: 'water',
+    start: { water: 100, fire: 'mid', time: 3 },
+    lock: ['fire', 'time'],
+    need: { key: 'water', distinct: 2, among: [50, 100] },
+    finding: '100mLでは24℃上がった。水の量が半分なら、上がる温度は2倍の48℃になるので、20＋48＝68℃。上がる温度は、水の量に反比例する。',
   },
 ];

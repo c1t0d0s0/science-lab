@@ -180,7 +180,7 @@ export const motionMissions: Mission[] = [
   {
     id: 'wind-strength-low',
     exp: 'wind',
-    levels: grades(1, 2),
+    levels: grades(2),
     question: 'かぜを つよく すると、くるまは？',
     choices: ['とおくまで すすむ', 'ちかくで とまる', 'かわらない'],
     answer: 0,
@@ -192,7 +192,7 @@ export const motionMissions: Mission[] = [
   {
     id: 'wind-sail',
     exp: 'wind',
-    levels: grades(1, 2),
+    levels: grades(2),
     question: 'ほが ある くるまと ない くるま、よく すすむのは どっち？',
     choices: ['ほが ある くるま', 'ほが ない くるま', 'おなじ'],
     answer: 0,
@@ -204,7 +204,7 @@ export const motionMissions: Mission[] = [
   {
     id: 'wind-strength',
     exp: 'wind',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: '風(かぜ)が弱(よわ)いときと強(つよ)いときでくらべると、車(くるま)の進(すす)むきょりは？',
     choices: ['強いほうが遠くまで進む', '弱いほうが遠くまで進む', '変(か)わらない'],
     answer: 0,
@@ -216,7 +216,7 @@ export const motionMissions: Mission[] = [
   {
     id: 'rubber-stretch',
     exp: 'rubber',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: 'ゴムを長(なが)くのばすほど、車(くるま)の進(すす)むきょりは？',
     choices: ['長くなる', '短(みじか)くなる', '変(か)わらない'],
     answer: 0,
@@ -228,7 +228,7 @@ export const motionMissions: Mission[] = [
   {
     id: 'rubber-bands',
     exp: 'rubber',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: 'ゴムをのばす長(なが)さは同じにして、ゴムを1本から2本にふやすと、車(くるま)の進(すす)むきょりは？',
     choices: ['長くなる', '短(みじか)くなる', '変(か)わらない'],
     answer: 0,

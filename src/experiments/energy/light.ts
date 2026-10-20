@@ -166,7 +166,7 @@ export const lightMissions: Mission[] = [
   {
     id: 'shadow-side',
     exp: 'shadow',
-    levels: grades(1, 2),
+    levels: grades(1),
     question: 'ライトを ひだりから あてると、かげは どっちに できる？',
     choices: ['ひだり', 'みぎ', 'かげは できない'],
     answer: 1,
@@ -177,7 +177,7 @@ export const lightMissions: Mission[] = [
   {
     id: 'shadow-height',
     exp: 'shadow',
-    levels: grades(1, 2),
+    levels: grades(2),
     question: 'ライトを たかく すると、かげの ながさは？',
     choices: ['ながく なる', 'みじかく なる', 'かわらない'],
     answer: 1,
@@ -189,7 +189,7 @@ export const lightMissions: Mission[] = [
   {
     id: 'mirror-straight',
     exp: 'mirror',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: 'かがみではね返(かえ)した日光(にっこう)は、どのように進(すす)む？',
     choices: ['まっすぐ進む', '曲(ま)がりながら進む', 'ちらばって見えなくなる'],
     answer: 0,
@@ -202,7 +202,7 @@ export const lightMissions: Mission[] = [
   {
     id: 'mirror-count',
     exp: 'mirror',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: 'はね返(かえ)した日光(にっこう)を重(かさ)ねると、当(あ)てたところの温度(おんど)は？',
     choices: ['かがみが多(おお)いほど高くなる', 'かがみが多いほど低(ひく)くなる', '変(か)わらない'],
     answer: 0,

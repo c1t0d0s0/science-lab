@@ -86,7 +86,7 @@ export const sunshadowMissions: Mission[] = [
   {
     id: 'sun-direction',
     exp: 'sunshadow',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: '午前(ごぜん)9時(じ)、太陽(たいよう)が東(ひがし)の空にあるとき、かげはどの方位(ほうい)にできる？',
     choices: ['東(ひがし)', '西(にし)', '南(みなみ)', '北(きた)'],
     answer: 1,
@@ -97,7 +97,7 @@ export const sunshadowMissions: Mission[] = [
   {
     id: 'sun-length',
     exp: 'sunshadow',
-    levels: grades(3, 4),
+    levels: grades(3),
     question: 'かげの長さがいちばん短(みじか)いのはいつ？',
     choices: ['午前(ごぜん)9時(じ)', '正午(しょうご)', '午後(ごご)3時(じ)', 'いつも同じ'],
     answer: 1,
