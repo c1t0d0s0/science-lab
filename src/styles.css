@@ -2261,3 +2261,13 @@ rt {
 .field-title a {
   color: inherit;
 }
+
+/* ホームの「今日のチャレンジの実験」 */
+.today-exp {
+  justify-self: start;
+  gap: 0.3rem;
+  min-height: 2rem;
+  color: inherit;
+  text-decoration: none;
+  white-space: normal;
+}

@@ -1,16 +1,13 @@
 import { dailyMission } from '../core/daily';
 import { jstDate } from '../core/date';
 import { GRADE, LEVELS, modeOf, type Level } from '../core/levels';
-import { balance, clearedCount, clearedMark, currentStreak, doneMark, getNotes, pruneOld } from '../core/storage';
+import { balance, clearedMark, currentStreak, doneMark, getNotes, pruneOld } from '../core/storage';
 import { EXPERIMENTS, FIELDS, MISSIONS, experimentById, experimentsFor, missionsFor } from '../experiments';
 import { accountBox } from './account';
 import { h, hanamaru, homeButton, mark, withRuby } from './dom';
 import { thumbnail } from './lab';
 import { guide, shiba } from './shiba';
 import { EXAM_BADGE, FIELD_LABEL, HOWTO, LEVEL_LABEL, MODE_LABEL, MODE_NOTE, REWARD, dateLabel, say } from './text';
-
-/** 右の列を出す画面のはば (styles.css の .home と同じ値) */
-const WIDE = '(min-width: 64rem)';
 
 /** 方眼ノートのマスに「理」「科」と書いた、タイトルのかざり */
 function crest(): HTMLElement {
@@ -98,30 +95,28 @@ export function renderHome(root: HTMLElement): void {
         h(
           'section',
           { class: 'fields', 'aria-labelledby': 'fields-title' },
-          h('h2', { id: 'fields-title' }, '実験の一覧'),
-          h('p', { class: 'fields-note' }, `${EXPERIMENTS.length}の実験・${MISSIONS.length}のミッション。クリアしたミッション: ${clearedCount()}`),
-          ...LEVELS.map((level) =>
-            h(
+          h('h2', { id: 'fields-title' }, '今日のチャレンジの実験'),
+          h('p', { class: 'fields-note' }, `ぜんぶで${EXPERIMENTS.length}の実験・${MISSIONS.length}のミッション。ほかの実験は、学年のページからえらべます。`),
+          ...LEVELS.map((level) => {
+            const exp = experimentById(dailyMission(today, level).exp)!;
+            const done = doneMark(today, level) > 0;
+            return h(
               'div',
               { class: 'field-group' },
               h('h3', { class: 'field-title' }, h('a', { href: `#/${level}` }, LEVEL_LABEL[level])),
               h(
-                'div',
-                {},
-                h('p', { class: 'fields-count' }, `${experimentsFor(level).length}の実験・${missionsFor(level).length}のミッション`),
-                h('ul', { class: 'chips' }, ...experimentsFor(level).map((e) => withRuby('li', `chip field-${e.field}`, e.label))),
+                'a',
+                { class: `chip today-exp field-${exp.field}`, href: `#/daily/${level}` },
+                done ? mark(true, 'mark mark-small') : null,
+                withRuby('span', '', say(level, exp)),
+                done ? h('span', { class: 'sr-only' }, '（やりとげた）') : null,
               ),
-            ),
-          ),
-          h(
-            'p',
-            { class: 'fields-note' },
-            ...FIELDS.map((f) => h('span', { class: `chip chip-small field-${f}` }, FIELD_LABEL[f].label.replace(/\(.+?\)/g, '').replace(/（.*/, ''))),
-          ),
+            );
+          }),
         ),
         h(
           'details',
-          { class: 'howto', open: matchMedia(WIDE).matches },
+          { class: 'howto' },
           h('summary', {}, 'あそびかた'),
           h('ul', {}, ...HOWTO.map((item) => h('li', {}, item))),
         ),
