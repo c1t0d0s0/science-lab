@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { circle, fig, group, line, path, text } from '../diagrams/svg';
-import type { Experiment, Mission } from './types';
+import { grades } from '../../core/levels';
+import { circle, fig, group, line, path, text } from '../../diagrams/svg';
+import type { Experiment, Mission } from '../types';
 
 // 月の形と、太陽・地球・月の位置。北極の上から見て、太陽は右がわ (ずっと遠く) にある。
 // 月は地球のまわりを反時計回りに回る。angle は、地球から見た太陽の方向と月の方向の間の角度 (0 で新月、180 で満月)。
@@ -74,6 +74,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const moon: Experiment = {
   id: 'moon',
+  field: 'earth',
   label: '月(つき)と太陽(たいよう)',
   summary: '月の位置を動かして、太陽・地球・月の位置と月の形の関係を調べよう',
   setup: '北極(ほっきょく)の上から見た、太陽・地球・月の位置の図です。太陽の光は右から来ます。月の位置（角度）を動かして、地球から見た月の形を調べます。',

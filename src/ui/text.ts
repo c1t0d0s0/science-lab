@@ -1,6 +1,6 @@
 import { GRADE, modeOf, type Level, type Mode } from '../core/levels';
 import { CHALLENGE_POINTS, FREE_POINTS, HIT_BONUS, MISSION_HIT_BONUS, MISSION_POINTS, MONTH_POINTS, WEEK_LENGTH, WEEK_POINTS } from '../core/rewards';
-import type { Label } from '../experiments/types';
+import type { Field, Label } from '../experiments/types';
 
 /** 1・2 年生には、ひらがなの文があればそちらを出す */
 export const say = (level: Level, l: Label) => (GRADE[level] <= 2 && l.kana ? l.kana : l.label);
@@ -32,6 +32,16 @@ export const MODE_NOTE: Record<Mode, string> = {
 };
 
 export const modeLabel = (level: Level) => MODE_LABEL[modeOf(level)];
+
+/** 学習指導要領の 4 つの区分。子どもにも分かるよう、中身をそえる */
+export const FIELD_LABEL: Record<Field, Label> = {
+  energy: { label: 'エネルギー（力・光・音・電気）', kana: 'ちから・ひかり・おと' },
+  particle: { label: '粒子(りゅうし)（もののせいしつ）', kana: 'もの の せいしつ' },
+  life: { label: '生命(せいめい)（生き物・人の体）', kana: 'いきもの' },
+  earth: { label: '地球(ちきゅう)（天気・星・大地）', kana: 'そら・てんき・だいち' },
+};
+
+export const EXAM_BADGE = '受験';
 
 const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
 

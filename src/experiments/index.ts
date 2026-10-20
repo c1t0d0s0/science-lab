@@ -1,34 +1,63 @@
 import type { Level } from '../core/levels';
-import { circuit, circuitMissions } from './circuit';
-import { electromagnet, electromagnetMissions } from './electromagnet';
-import { float, floatMissions } from './float';
-import { heating, heatingMissions } from './heating';
-import { lever, leverMissions } from './lever';
-import { lightMissions, mirror, shadow, sunshadow } from './light';
-import { magnet, magnetMissions } from './magnet';
-import { moon, moonMissions } from './moon';
-import { motionMissions, rubber, wind } from './motion';
-import { pendulum, pendulumMissions } from './pendulum';
-import { plant, plantMissions } from './plant';
-import { solution, solutionMissions } from './solution';
-import type { Experiment, Mission } from './types';
+import { moon, moonMissions } from './earth/moon';
+import { sunshadow, sunshadowMissions } from './earth/sunshadow';
+import { buoyancy, buoyancyMissions } from './energy/buoyancy';
+import { circuit, circuitMissions } from './energy/circuit';
+import { convex, convexMissions } from './energy/convex';
+import { capacitor, electricityMissions, nichrome } from './energy/electricity';
+import { electromagnet, electromagnetMissions } from './energy/electromagnet';
+import { lens, lensMissions } from './energy/lens';
+import { lever, leverMissions } from './energy/lever';
+import { lightMissions, mirror, shadow } from './energy/light';
+import { magnet, magnetMissions } from './energy/magnet';
+import { monochord, monochordMissions } from './energy/monochord';
+import { motionMissions, rubber, wind } from './energy/motion';
+import { motor, motorMissions } from './energy/motor';
+import { pendulum, pendulumMissions } from './energy/pendulum';
+import { poles, polesMissions } from './energy/poles';
+import { pulley, pulleyMissions } from './energy/pulley';
+import { slope, slopeMissions } from './energy/slope';
+import { drum, itodenwa, soundMissions } from './energy/sound';
+import { spring, springMissions } from './energy/spring';
+import { plant, plantMissions } from './life/plant';
+import { float, floatMissions } from './particle/float';
+import { heating, heatingMissions } from './particle/heating';
+import { solution, solutionMissions } from './particle/solution';
+import type { Experiment, Field, Mission } from './types';
 
-/** 全部の実験 (一覧に出す順) */
+/** 全部の実験。学年のページでは、分野ごとに、この順でならべる */
 export const EXPERIMENTS: Experiment[] = [
+  // エネルギー
   magnet,
-  float,
   shadow,
+  itodenwa,
   wind,
-  sunshadow,
+  slope,
+  poles,
   mirror,
+  lens,
+  drum,
   rubber,
   circuit,
-  heating,
+  motor,
   pendulum,
-  plant,
   electromagnet,
+  monochord,
   lever,
+  pulley,
+  spring,
+  buoyancy,
+  capacitor,
+  nichrome,
+  convex,
+  // 粒子
+  float,
+  heating,
   solution,
+  // 生命
+  plant,
+  // 地球
+  sunshadow,
   moon,
 ];
 
@@ -36,6 +65,7 @@ export const MISSIONS: Mission[] = [
   ...magnetMissions,
   ...floatMissions,
   ...lightMissions,
+  ...sunshadowMissions,
   ...motionMissions,
   ...circuitMissions,
   ...heatingMissions,
@@ -45,7 +75,20 @@ export const MISSIONS: Mission[] = [
   ...leverMissions,
   ...solutionMissions,
   ...moonMissions,
+  ...soundMissions,
+  ...slopeMissions,
+  ...polesMissions,
+  ...lensMissions,
+  ...motorMissions,
+  ...monochordMissions,
+  ...pulleyMissions,
+  ...springMissions,
+  ...buoyancyMissions,
+  ...electricityMissions,
+  ...convexMissions,
 ];
+
+export const FIELDS: readonly Field[] = ['energy', 'particle', 'life', 'earth'];
 
 export const experimentById = (id: string) => EXPERIMENTS.find((e) => e.id === id);
 export const missionById = (id: string) => MISSIONS.find((m) => m.id === id);

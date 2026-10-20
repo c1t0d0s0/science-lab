@@ -1,8 +1,8 @@
-import { grades } from '../core/levels';
-import type { Rng } from '../core/rng';
-import { fig, group, line, path, rect, text } from '../diagrams/svg';
-import { gauss } from './noise';
-import type { Experiment, Mission } from './types';
+import { grades } from '../../core/levels';
+import type { Rng } from '../../core/rng';
+import { fig, group, line, path, rect, text } from '../../diagrams/svg';
+import { gauss } from '../noise';
+import type { Experiment, Mission } from '../types';
 
 // 電磁石の強さ。コイルの巻き数が多いほど、電流が大きいほど強くなる。鉄しんを入れると強くなる。
 // 巻き数を変えるときは、導線の長さをそろえる (あまった導線は切らずにまとめておく)。
@@ -51,6 +51,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const electromagnet: Experiment = {
   id: 'electromagnet',
+  field: 'energy',
   label: '電磁石(でんじしゃく)の強(つよ)さ',
   summary: 'コイルの巻き数・電流の大きさ・鉄しんを変えて、電磁石の強さを調べよう',
   setup: '鉄しん（鉄のくぎ）にどう線を巻(ま)いてコイルを作り、かん電池につなぐと電磁石(でんじしゃく)になります。電磁石のはしに、いくつクリップが引きつけられるかで強さをくらべます。どう線の長さはどれも同じです。',

@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { circle, ellipse, fig, group, line, path, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission, Option } from './types';
+import { grades } from '../../core/levels';
+import { circle, ellipse, fig, group, line, path, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission, Option } from '../types';
 
 // 水よう液のなかま分け。A〜E の 5 つの水よう液を、4 つの調べ方で見分ける。
 //   A 食塩水 / B 炭酸水 / C うすい塩酸 / D 石灰水 / E アンモニア水
@@ -80,6 +80,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const solution: Experiment = {
   id: 'solution',
+  field: 'particle',
   label: '水(すい)よう液(えき)のなかま分(わ)け',
   summary: '5つの水よう液A〜Eを、リトマス紙・じょう発・におい・アルミニウムで調べて見分けよう',
   setup: 'A〜Eの5本の試験管(しけんかん)に、食塩水・炭酸水・うすい塩酸・石灰水・アンモニア水のどれかが入っています（どれがどれかは分かりません）。4つの調べ方を使って見分けます。',

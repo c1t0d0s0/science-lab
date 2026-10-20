@@ -2071,6 +2071,10 @@ rt {
 .fig .moon-dark { fill: #59616b; }
 .fig .moon-lit { fill: #ffe36e; stroke: none; }
 .fig .faint { opacity: 0.4; }
+.fig .salt-water { fill: #b9d7c9; }
+.fig .nichrome { stroke: #8a5a3a; }
+.fig .heat-glow { stroke: #ff7a3d; stroke-width: 6; }
+.fig .screen-line { stroke: #9aa6b2; }
 
 @media (prefers-color-scheme: dark) {
   .fig .ground { fill: #6e5b44; }
@@ -2108,4 +2112,76 @@ rt {
 
 .gallery-cell .fig {
   width: 100%;
+}
+
+/* ---- 分野 (学習指導要領の 4 つの区分) ---- */
+:root {
+  --f-energy: #fde7c8;
+  --f-particle: #dcefe0;
+  --f-life: #fbe0e6;
+  --f-earth: #dde8fa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --f-energy: #4a3a1e;
+    --f-particle: #233f2c;
+    --f-life: #47262e;
+    --f-earth: #22314c;
+  }
+}
+
+.chip.field-energy { background: var(--f-energy); }
+.chip.field-particle { background: var(--f-particle); }
+.chip.field-life { background: var(--f-life); }
+.chip.field-earth { background: var(--f-earth); }
+
+.field-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.field-chip {
+  min-height: var(--tap);
+  padding: 0 1rem;
+  text-decoration: none;
+}
+
+.field-section {
+  display: grid;
+  gap: 0.75rem;
+  scroll-margin-top: 0.75rem;
+}
+
+.field-heading {
+  padding: 0.35rem 0.9rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.field-section.field-energy .field-heading { background: var(--f-energy); }
+.field-section.field-particle .field-heading { background: var(--f-particle); }
+.field-section.field-life .field-heading { background: var(--f-life); }
+.field-section.field-earth .field-heading { background: var(--f-earth); }
+
+.chip-exam {
+  margin-left: auto;
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.mission-q-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.fields-count {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.field-title a {
+  color: inherit;
 }

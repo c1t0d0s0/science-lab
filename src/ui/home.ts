@@ -2,12 +2,12 @@ import { dailyMission } from '../core/daily';
 import { jstDate } from '../core/date';
 import { GRADE, LEVELS, modeOf, type Level } from '../core/levels';
 import { balance, clearedCount, clearedMark, currentStreak, doneMark, getNotes, pruneOld } from '../core/storage';
-import { EXPERIMENTS, MISSIONS, experimentById, experimentsFor, missionsFor } from '../experiments';
+import { EXPERIMENTS, FIELDS, MISSIONS, experimentById, experimentsFor, missionsFor } from '../experiments';
 import { accountBox } from './account';
 import { h, hanamaru, homeButton, mark, withRuby } from './dom';
 import { thumbnail } from './lab';
 import { guide, shiba } from './shiba';
-import { HOWTO, LEVEL_LABEL, MODE_LABEL, MODE_NOTE, REWARD, dateLabel, say } from './text';
+import { EXAM_BADGE, FIELD_LABEL, HOWTO, LEVEL_LABEL, MODE_LABEL, MODE_NOTE, REWARD, dateLabel, say } from './text';
 
 /** 右の列を出す画面のはば (styles.css の .home と同じ値) */
 const WIDE = '(min-width: 64rem)';
@@ -100,13 +100,23 @@ export function renderHome(root: HTMLElement): void {
           { class: 'fields', 'aria-labelledby': 'fields-title' },
           h('h2', { id: 'fields-title' }, '実験の一覧'),
           h('p', { class: 'fields-note' }, `${EXPERIMENTS.length}の実験・${MISSIONS.length}のミッション。クリアしたミッション: ${clearedCount()}`),
-          ...(['g1', 'g3', 'g5', 'g6'] as Level[]).map((level) =>
+          ...LEVELS.map((level) =>
             h(
               'div',
               { class: 'field-group' },
-              h('h3', { class: 'field-title' }, ({ g1: '1・2年', g3: '3・4年', g5: '5年', g6: '6年' } as Record<string, string>)[level]),
-              h('ul', { class: 'chips' }, ...experimentsFor(level).map((e) => withRuby('li', 'chip', e.label))),
+              h('h3', { class: 'field-title' }, h('a', { href: `#/${level}` }, LEVEL_LABEL[level])),
+              h(
+                'div',
+                {},
+                h('p', { class: 'fields-count' }, `${experimentsFor(level).length}の実験・${missionsFor(level).length}のミッション`),
+                h('ul', { class: 'chips' }, ...experimentsFor(level).map((e) => withRuby('li', `chip field-${e.field}`, e.label))),
+              ),
             ),
+          ),
+          h(
+            'p',
+            { class: 'fields-note' },
+            ...FIELDS.map((f) => h('span', { class: `chip chip-small field-${f}` }, FIELD_LABEL[f].label.replace(/\(.+?\)/g, '').replace(/（.*/, ''))),
           ),
         ),
         h(
@@ -128,6 +138,8 @@ export function renderGrade(root: HTMLElement, level: Level): void {
   const daily = dailyMission(today, level);
   const done = doneMark(today, level);
   const dailyExp = experimentById(daily.exp)!;
+  const exps = experimentsFor(level);
+  const fields = FIELDS.filter((f) => exps.some((e) => e.field === f));
 
   const expCard = (expId: string) => {
     const exp = experimentById(expId)!;
@@ -153,7 +165,8 @@ export function renderGrade(root: HTMLElement, level: Level): void {
                 'a',
                 { class: `mission-link${c ? ' is-cleared' : ''}`, href: `#/lab/${level}/${m.id}` },
                 c ? mark(true, 'mark mark-small') : h('span', { class: 'mission-dot', 'aria-hidden': 'true' }),
-                withRuby('span', '', m.question),
+                withRuby('span', 'mission-q-text', m.question),
+                m.exam ? h('span', { class: 'chip chip-small chip-exam', title: '中学受験に出る発展の内容' }, EXAM_BADGE) : null,
                 c ? h('span', { class: 'sr-only' }, '（クリアずみ）') : null,
               ),
             );
@@ -182,7 +195,30 @@ export function renderGrade(root: HTMLElement, level: Level): void {
           h('p', { class: 'card-actions' }, done ? mark(true, 'mark mark-small') : null, h('a', { class: 'btn btn-primary', href: `#/daily/${level}` }, done ? '見直す' : 'チャレンジする')),
         ),
         withRuby('h2', 'section-title', low ? 'じっけんを えらぼう' : '実験(じっけん)をえらぼう'),
-        h('ul', { class: 'exp-list' }, ...experimentsFor(level).map((e) => expCard(e.id))),
+        fields.length > 1
+          ? h(
+              'nav',
+              { class: 'field-nav', 'aria-label': '分野' },
+              ...fields.map((f) => {
+                const a = withRuby('a', `chip field-chip field-${f}`, say(level, FIELD_LABEL[f]));
+                a.setAttribute('href', `#field-${f}`);
+                a.addEventListener('click', (e) => {
+                  // ハッシュはページの切りかえに使っているので、ここではスクロールだけする
+                  e.preventDefault();
+                  document.getElementById(`field-${f}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+                return a;
+              }),
+            )
+          : null,
+        ...fields.map((f) =>
+          h(
+            'section',
+            { class: `field-section field-${f}`, id: `field-${f}`, 'aria-labelledby': `field-${f}-title` },
+            withRuby('h3', 'field-heading', say(level, FIELD_LABEL[f])),
+            h('ul', { class: 'exp-list' }, ...exps.filter((e) => e.field === f).map((e) => expCard(e.id))),
+          ),
+        ),
       ),
     ),
   );

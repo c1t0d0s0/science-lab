@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { circle, ellipse, fig, group, line, path, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission } from './types';
+import { grades } from '../../core/levels';
+import { circle, ellipse, fig, group, line, path, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission } from '../types';
 
 // インゲンマメの発芽と成長。
 // 発芽に必要なのは 水・空気・適当な温度。日光や肥料は発芽には必要ない。
@@ -63,6 +63,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const plant: Experiment = {
   id: 'plant',
+  field: 'life',
   label: '発芽(はつが)と成長(せいちょう)',
   summary: '水・空気・温度・日光・肥料の条件を変えて、インゲンマメの発芽と成長を調べよう',
   setup: 'インゲンマメの種子を、だっし綿(めん)の上（肥料ありは土の上）に置いて、10日間ようすを見ます。水・空気・温度・日光・肥料の条件を変えて、発芽と成長をくらべます。',

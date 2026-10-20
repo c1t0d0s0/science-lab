@@ -1,8 +1,8 @@
-import { grades } from '../core/levels';
-import type { Rng } from '../core/rng';
-import { circle, fig, line, path, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission } from './types';
-import { gauss } from './noise';
+import { grades } from '../../core/levels';
+import type { Rng } from '../../core/rng';
+import { circle, fig, line, path, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission } from '../types';
+import { gauss } from '../noise';
 
 // ふりこ。1 往復する時間は、ふりこの長さだけで決まり、おもりの重さやふれはばには関係しない
 // (ふれはばが小さいとき。T = 2π√(L/g))。
@@ -56,6 +56,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const pendulum: Experiment = {
   id: 'pendulum',
+  field: 'energy',
   label: 'ふりこのきまり',
   summary: 'ふりこの長さ・おもりの重さ・ふれはばを変えて、1往復する時間を調べよう',
   setup: '糸(いと)におもりをつるしたふりこです。おもりを横に引いて（引いた角度がふれはば）手をはなし、10往復する時間をストップウォッチではかって、10でわって1往復の時間を求めます。',

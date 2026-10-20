@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { circle, fig, group, path, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission, Option } from './types';
+import { grades } from '../../core/levels';
+import { circle, fig, group, path, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission, Option } from '../types';
 
 // 水に うく もの・しずむ もの (1・2 年生むけ)。おもさではなく、ものの なかみや かたちで きまる。
 
@@ -53,6 +53,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const float: Experiment = {
   id: 'float',
+  field: 'particle',
   label: 'うくもの・しずむもの',
   kana: 'うく もの・しずむ もの',
   summary: 'いろいろな物を水に入れて、うくか しずむか 調べよう',

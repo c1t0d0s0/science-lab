@@ -1,16 +1,27 @@
 import { describe, expect, it } from 'vitest';
 import { initialConditions, readiness, shownVariables } from '../src/core/lab';
-import { LEVELS, modeOf } from '../src/core/levels';
+import { LEVELS, modeOf, type Level } from '../src/core/levels';
 import { rngFromString } from '../src/core/rng';
 import type { Trial } from '../src/core/snapshot';
 import { EXPERIMENTS, MISSIONS, experimentById, experimentsFor, missionsFor } from '../src/experiments';
-import { voltage } from '../src/experiments/circuit';
-import { clips } from '../src/experiments/electromagnet';
-import { waterTemp } from '../src/experiments/heating';
-import { tilt } from '../src/experiments/lever';
-import { litPath } from '../src/experiments/moon';
-import { measurePeriod, period } from '../src/experiments/pendulum';
-import { grow } from '../src/experiments/plant';
+import { scaleReading } from '../src/experiments/energy/buoyancy';
+import { voltage } from '../src/experiments/energy/circuit';
+import { imageDistance, imageOf } from '../src/experiments/energy/convex';
+import { glowTime, heatRise } from '../src/experiments/energy/electricity';
+import { spotTemp } from '../src/experiments/energy/lens';
+import { frequency } from '../src/experiments/energy/monochord';
+import { motorCurrent } from '../src/experiments/energy/motor';
+import { poleForce } from '../src/experiments/energy/poles';
+import { pullForce } from '../src/experiments/energy/pulley';
+import { rollDistance } from '../src/experiments/energy/slope';
+import { drumSound } from '../src/experiments/energy/sound';
+import { stretch } from '../src/experiments/energy/spring';
+import { clips } from '../src/experiments/energy/electromagnet';
+import { waterTemp } from '../src/experiments/particle/heating';
+import { tilt } from '../src/experiments/energy/lever';
+import { litPath } from '../src/experiments/earth/moon';
+import { measurePeriod, period } from '../src/experiments/energy/pendulum';
+import { grow } from '../src/experiments/life/plant';
 import type { Experiment, Mission, Variable } from '../src/experiments/types';
 import { assertWellFormed } from './helpers';
 
@@ -161,6 +172,93 @@ describe('実験のきまり', () => {
   });
 });
 
+/** 学年ごとに、かならず遊べる実験 (学習指導要領の単元と、中学受験のテーマ) */
+const UNITS: Partial<Record<Level, string[]>> = {
+  g1: ['magnet', 'float', 'shadow', 'itodenwa'],
+  g2: ['float', 'shadow', 'wind', 'slope'],
+  g3: ['magnet', 'poles', 'wind', 'rubber', 'mirror', 'lens', 'drum', 'itodenwa', 'circuit', 'sunshadow'],
+  g4: ['circuit', 'motor'],
+  g5: ['pendulum', 'electromagnet', 'monochord', 'plant', 'heating'],
+  g6: ['lever', 'pulley', 'spring', 'buoyancy', 'capacitor', 'nichrome', 'convex', 'solution', 'moon'],
+};
+
+describe('エネルギーの実験のきまり', () => {
+  it('糸電話・たいこ: ぴんとはると聞こえ、強くたたくと大きい音、おさえると止まる', () => {
+    const it2 = experimentById('itodenwa')!;
+    expect(sim(it2, { string: 'tight', pinch: 'no' })).toBe('hear');
+    expect(sim(it2, { string: 'loose' })).toBe('no');
+    expect(sim(it2, { pinch: 'yes' })).toBe('no');
+    expect(drumSound({ hit: 'strong', hold: 'no' })).toBe('big');
+    expect(drumSound({ hit: 'weak', hold: 'no' })).toBe('small');
+    expect(drumSound({ hit: 'strong', hold: 'yes' })).toBe('none');
+  });
+
+  it('さか: たかいほど・まるいほど とおくまで ころがる', () => {
+    expect(rollDistance('high', 'ball')).toBeGreaterThan(rollDistance('low', 'ball'));
+    expect(rollDistance('mid', 'ball')).toBeGreaterThan(rollDistance('mid', 'block'));
+  });
+
+  it('磁石の極: 同じ極はしりぞけ合い、ちがう極は引き合う', () => {
+    expect(poleForce('N', 'N')).toBe('repel');
+    expect(poleForce('S', 'S')).toBe('repel');
+    expect(poleForce('N', 'S')).toBe('attract');
+  });
+
+  it('虫めがね: 円が小さいほど・レンズが大きいほど熱い', () => {
+    expect(spotTemp('small', 'small')).toBeGreaterThan(spotTemp('mid', 'small'));
+    expect(spotTemp('mid', 'small')).toBeGreaterThan(spotTemp('big', 'small'));
+    expect(spotTemp('mid', 'large')).toBeGreaterThan(spotTemp('mid', 'small'));
+  });
+
+  it('モーター: 電池の向きで回る向きが変わり、直列は速く、へい列は同じ', () => {
+    expect(motorCurrent({ direction: 'reverse', batteries: 1 })).toBe(-1);
+    expect(motorCurrent({ batteries: 2, wiring: 'series' })).toBe(2);
+    expect(motorCurrent({ batteries: 2, wiring: 'parallel' })).toBe(1);
+  });
+
+  it('モノコード: 短い・細い・強くはるほど高い音。長さ半分で2倍、おもり4倍で2倍', () => {
+    expect(frequency(20, 'thin', 400)).toBe(2 * frequency(40, 'thin', 400));
+    expect(frequency(40, 'thin', 400)).toBe(2 * frequency(40, 'thick', 400));
+    expect(frequency(40, 'thin', 400)).toBe(2 * frequency(40, 'thin', 100));
+  });
+
+  it('かっ車・輪じく: 定かっ車は同じ、動かっ車は半分、2こで4分の1、輪じく(3:1)で3分の1', () => {
+    expect(pullForce('fixed', 300)).toBe(300);
+    expect(pullForce('moving', 300)).toBe(150);
+    expect(pullForce('double', 400)).toBe(100);
+    expect(pullForce('axle', 300)).toBe(100);
+  });
+
+  it('ばね: のびは重さに比例し、直列で2倍、へい列で半分', () => {
+    expect(stretch(40, 'single')).toBe(2 * stretch(20, 'single'));
+    expect(stretch(40, 'series')).toBe(2 * stretch(40, 'single'));
+    expect(stretch(40, 'parallel')).toBe(stretch(40, 'single') / 2);
+  });
+
+  it('浮力: おしのけた液体の重さだけ軽くなり、体積が同じなら金ぞくによらない', () => {
+    expect(scaleReading(100, 'alu', 'air') - scaleReading(100, 'alu', 'water')).toBeCloseTo(100, 6);
+    expect(scaleReading(100, 'iron', 'air') - scaleReading(100, 'iron', 'water')).toBeCloseTo(100, 6);
+    expect(scaleReading(100, 'alu', 'salt')).toBeLessThan(scaleReading(100, 'alu', 'water'));
+  });
+
+  it('電気の利用: 発光ダイオードは長くつき、回数に比例。電熱線は太い・短い・電流大で発熱大', () => {
+    expect(glowTime(20, 'led')).toBeGreaterThan(glowTime(20, 'bulb'));
+    expect(glowTime(40, 'bulb')).toBe(2 * glowTime(20, 'bulb'));
+    expect(heatRise('thick', 10, 1)).toBe(2 * heatRise('thin', 10, 1));
+    expect(heatRise('thin', 20, 1)).toBe(heatRise('thin', 10, 1) / 2);
+    expect(heatRise('thin', 10, 2)).toBe(4 * heatRise('thin', 10, 1));
+  });
+
+  it('凸レンズ: 2倍の位置で同じ大きさ、遠いほど小さく、しょう点より内側はうつらない', () => {
+    expect(imageOf(20)).toBe('same');
+    expect(imageDistance(20)).toBe(20);
+    expect(imageOf(40)).toBe('small');
+    expect(imageOf(15)).toBe('big');
+    expect(imageOf(5)).toBe('virtual');
+    expect(imageDistance(40)!).toBeLessThan(imageDistance(30)!);
+  });
+});
+
 /** そのミッションを、調べる条件だけを変えながら実験したときの記録 */
 function playMission(m: Mission): Trial[] {
   const exp = experimentById(m.exp)!;
@@ -224,6 +322,10 @@ describe('ミッション', () => {
       'rubber-stretch': 'up',
       'rubber-bands': 'up',
       'mirror-count': 'up',
+      'mono-length': 'down',
+      'mono-tension': 'up',
+      'nichrome-length': 'down',
+      'lens-spot': 'up',
     };
     for (const [id, dir] of Object.entries(expected)) {
       const m = MISSIONS.find((x) => x.id === id)!;
@@ -232,6 +334,17 @@ describe('ミッション', () => {
       const last = t[t.length - 1].v as number;
       const got = last > first ? 'up' : last < first ? 'down' : 'flat';
       expect(got, id).toBe(dir);
+    }
+  });
+
+  it('受験の発展ミッションは 5・6 年生だけ', () => {
+    for (const m of MISSIONS.filter((x) => x.exam)) for (const l of m.levels) expect(['g5', 'g6'], m.id).toContain(l);
+  });
+
+  it('学習指導要領の単元 (と受験のテーマ) に、それぞれ実験がある', () => {
+    for (const [level, ids] of Object.entries(UNITS)) {
+      const have = experimentsFor(level as Level).map((e) => e.id);
+      for (const id of ids) expect(have, `${level} ${id}`).toContain(id);
     }
   });
 

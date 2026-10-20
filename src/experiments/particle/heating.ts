@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { circle, fig, group, line, path, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission } from './types';
+import { grades } from '../../core/levels';
+import { circle, fig, group, line, path, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission } from '../types';
 
 // 水をあたためたときの温度の変わり方。
 // 上がる温度は、火の強さ × 時間 に比例し、水の量に反比例する。100℃近くでふっとうすると、それ以上は上がらない。
@@ -61,6 +61,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const heating: Experiment = {
   id: 'heating',
+  field: 'particle',
   label: '水(みず)をあたためる',
   summary: '水の量・火の強さ・あたためる時間を変えて、水の温度の上がり方を調べよう',
   setup: 'ビーカーに20℃の水を入れ、金あみの上で熱します。水の量・火の強さ・あたためる時間を変えて、あたためたあとの水の温度を温度計ではかります。',

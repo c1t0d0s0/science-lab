@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { fig, group, line, path, polygon, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission } from './types';
+import { grades } from '../../core/levels';
+import { fig, group, line, path, polygon, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission } from '../types';
 
 // 実験用てこ。「おもりの重さ × 支点からのきょり(目もり)」が左右で等しいとき、水平につり合う。
 
@@ -54,6 +54,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const lever: Experiment = {
   id: 'lever',
+  field: 'energy',
   label: 'てこのきまり',
   summary: 'おもりの重さと位置を変えて、てこがつり合うきまりを見つけよう',
   setup: '実験用てこの左右のうでに、おもりをつるします。目もりの数字は、支点(してん)（まん中）からのきょりです。てこが どちらにかたむくか、水平につり合うかを調べます。',

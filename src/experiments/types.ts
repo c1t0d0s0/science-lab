@@ -41,8 +41,12 @@ export type Measure =
   | (Label & { kind: 'number'; unit: string; digits: number })
   | (Label & { kind: 'category'; options: Option[] });
 
+/** 学習指導要領の 4 つの区分 */
+export type Field = 'energy' | 'particle' | 'life' | 'earth';
+
 export interface Experiment extends Label {
   id: string;
+  field: Field;
   /** 一覧に出す、ひとことの説明 */
   summary: string;
   kanaSummary?: string;
@@ -116,4 +120,6 @@ export interface Mission {
   conclusions?: Conclusion[];
   /** 6 年生むけ: はかるたびに結果がばらつく */
   noise?: boolean;
+  /** 中学受験に出る発展の内容 */
+  exam?: boolean;
 }

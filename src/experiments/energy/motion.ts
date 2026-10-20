@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { circle, fig, group, line, path, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission } from './types';
+import { grades } from '../../core/levels';
+import { circle, fig, group, line, path, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission } from '../types';
 
 // 風(かぜ)とゴムの力で動く車。力が大きいほど、車は遠くまで進む。
 
@@ -59,6 +59,7 @@ function windScene(c: Record<string, number | string>, result: number | string |
 
 export const wind: Experiment = {
   id: 'wind',
+  field: 'energy',
   label: '風(かぜ)で動(うご)く車(くるま)',
   kana: 'かぜで うごく くるま',
   summary: '風の強さや ほのあるなしを変えて、車の進むきょりを調べよう',
@@ -161,6 +162,7 @@ function rubberScene(c: Record<string, number | string>, result: number | string
 
 export const rubber: Experiment = {
   id: 'rubber',
+  field: 'energy',
   label: 'ゴムで動(うご)く車(くるま)',
   summary: 'ゴムをのばす長さや本数を変えて、車の進むきょりを調べよう',
   setup: '発(はっ)しゃ台(だい)の2本のくぎの間に、輪(わ)ゴムをかけます。車の前のフックをゴムにひっかけ、車を後ろに引いてゴムをのばします。手をはなすと、ゴムがもとにもどろうとする力で、車が前に進みます。図は、真上(まうえ)から見たところです。',

@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { circle, fig, group, line, path, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission, Option } from './types';
+import { grades } from '../../core/levels';
+import { circle, fig, group, line, path, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission, Option } from '../types';
 
 // かん電池・豆電球・スイッチの回路。
 // 3 年生: 回路が 1 つのわになると明かりがつく。金ぞくは電気を通す。
@@ -110,6 +110,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const circuit: Experiment = {
   id: 'circuit',
+  field: 'energy',
   label: '電気(でんき)の通(とお)り道(みち)',
   summary: 'かん電池・豆電球・スイッチをつないで、明かりがつくつなぎ方を調べよう',
   setup: 'かん電池(でんち)・豆電球(まめでんきゅう)・スイッチを、どう線でつないだ回路(かいろ)です。回路のとちゅうに物をはさんだり、かん電池の数やつなぎ方を変えたりして、豆電球に明かりがつくかを調べます。',

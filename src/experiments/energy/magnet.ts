@@ -1,6 +1,6 @@
-import { grades } from '../core/levels';
-import { circle, fig, group, line, path, rect, text } from '../diagrams/svg';
-import type { Experiment, Mission, Option } from './types';
+import { grades } from '../../core/levels';
+import { circle, fig, group, line, path, rect, text } from '../../diagrams/svg';
+import type { Experiment, Mission, Option } from '../types';
 
 // 磁石(じしゃく)につくもの・つかないもの。鉄(てつ)だけが引きつけられる。
 // 3・4 年生むけは、はなれていても引きつけること、間(あいだ)に物があっても引きつけることも調べる。
@@ -99,6 +99,7 @@ function scene(c: Record<string, number | string>, result: number | string | nul
 
 export const magnet: Experiment = {
   id: 'magnet',
+  field: 'energy',
   label: '磁石(じしゃく)につくもの',
   kana: 'じしゃくに つくもの',
   summary: 'いろいろな物を磁石に近づけて、つくもの・つかないものを調べよう',
