@@ -18,6 +18,16 @@ const valuesOf = (v: Variable) => (v.kind === 'range' ? range(v.min, v.max, v.st
 const range = (min: number, max: number, step: number) => Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + i * step);
 const sim = (exp: Experiment, c: Record<string, number | string>) => exp.simulate({ ...initialConditions(exp), ...c });
 
+describe('実験のしかた', () => {
+  it('どの実験にも、問いの前提になる「実験のしかた」がある', () => {
+    for (const exp of EXPERIMENTS) expect(exp.setup.length, exp.id).toBeGreaterThan(30);
+  });
+
+  it('1・2年生のミッションがある実験は、ひらがなの説明もある', () => {
+    for (const exp of experimentsFor('g1')) expect(exp.kanaSetup, exp.id).toBeTruthy();
+  });
+});
+
 describe('実験の図', () => {
   for (const exp of EXPERIMENTS) {
     it(`${exp.id}: どの条件でも、実験の前・とちゅう・あとの図が正しくかける`, () => {

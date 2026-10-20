@@ -46,6 +46,9 @@ export interface Experiment extends Label {
   /** 一覧に出す、ひとことの説明 */
   summary: string;
   kanaSummary?: string;
+  /** 実験のしかた (どんな道具を、どうつないで・置いて、何をはかるか)。問いを読む前提として、ミッションの上に出す */
+  setup: string;
+  kanaSetup?: string;
   variables: Variable[];
   measure: Measure;
   /**

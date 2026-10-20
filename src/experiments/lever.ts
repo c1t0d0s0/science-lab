@@ -56,6 +56,7 @@ export const lever: Experiment = {
   id: 'lever',
   label: 'てこのきまり',
   summary: 'おもりの重さと位置を変えて、てこがつり合うきまりを見つけよう',
+  setup: '実験用てこの左右のうでに、おもりをつるします。目もりの数字は、支点(してん)（まん中）からのきょりです。てこが どちらにかたむくか、水平につり合うかを調べます。',
   variables: [
     { key: 'lw', kind: 'range', label: '左(ひだり)のおもり', min: 10, max: 60, step: 10, unit: 'g', initial: 30 },
     { key: 'lp', kind: 'range', label: '左のおもりの目(め)もり', min: 1, max: 6, step: 1, unit: '', initial: 2 },

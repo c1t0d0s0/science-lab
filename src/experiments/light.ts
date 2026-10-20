@@ -51,6 +51,8 @@ export const shadow: Experiment = {
   kana: 'ライトと かげ',
   summary: 'ライトのばしょをかえて、かげのでき方を見よう',
   kanaSummary: 'ライトの ばしょを かえると、かげは どう なるかな',
+  setup: 'ゆかに立てたぼうに、ライトの光を当てます。ライトの ばしょ（ひだり・みぎ）と たかさを変えて、ゆかにできる かげを見ます。',
+  kanaSetup: 'ゆかに たてた ぼうに、ライトを あてるよ。ライトの ばしょと たかさを かえて、かげを みよう。',
   variables: [
     {
       key: 'side',
@@ -139,6 +141,7 @@ export const sunshadow: Experiment = {
   id: 'sunshadow',
   label: '太陽(たいよう)とかげ',
   summary: '時こくによって、太陽の位置とぼうのかげがどう変わるか調べよう',
+  setup: '校庭(こうてい)に立てたぼうと、そのかげを、真上(まうえ)から見た図です。上が北、右が東です。時こくを変えて、太陽の位置と、かげの向き・長さを調べます。',
   variables: [
     {
       key: 'time',
@@ -213,6 +216,7 @@ export const mirror: Experiment = {
   id: 'mirror',
   label: 'かがみと日光(にっこう)',
   summary: 'かがみではね返した日光の進み方と、重ねたときの明るさ・あたたかさを調べよう',
+  setup: '日なたで、かがみに日光を当て、はね返(かえ)した光を、日かげのかべの同じところに当てます。3分後に、光を当てたところの温度をはかります。',
   variables: [
     { key: 'mirrors', kind: 'range', label: 'かがみの数(かず)', min: 0, max: 3, step: 1, unit: 'まい', initial: 1 },
     {

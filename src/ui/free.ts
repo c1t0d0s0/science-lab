@@ -6,6 +6,7 @@ import { TRIAL_LIMIT } from '../core/snapshot';
 import { balance, finishFree, newNoteId } from '../core/storage';
 import type { Experiment, Variable } from '../experiments/types';
 import { conditionPanel } from './controls';
+import { setupBox } from './lab';
 import { dataView } from './data';
 import { figure, h, homeButton, mark, withRuby } from './dom';
 import { guide } from './shiba';
@@ -248,7 +249,7 @@ export function renderFree(root: HTMLElement, level: Level, exp: Experiment): ()
       h(
         'main',
         { class: 'lab' },
-        h('section', { class: 'mission-q card' }, withRuby('p', 'card-kicker', say(level, exp)), withRuby('p', 'section-note', low && exp.kanaSummary ? exp.kanaSummary : exp.summary)),
+        h('section', { class: 'mission-q card' }, withRuby('p', 'card-kicker', say(level, exp)), withRuby('p', 'section-note', low && exp.kanaSummary ? exp.kanaSummary : exp.summary), setupBox(exp, level, initialConditions(exp))),
         chooseTarget(),
         target ? predictCard(target) : null,
         target && prediction >= 0 ? bench(target) : null,

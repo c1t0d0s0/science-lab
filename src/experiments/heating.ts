@@ -63,6 +63,7 @@ export const heating: Experiment = {
   id: 'heating',
   label: '水(みず)をあたためる',
   summary: '水の量・火の強さ・あたためる時間を変えて、水の温度の上がり方を調べよう',
+  setup: 'ビーカーに20℃の水を入れ、金あみの上で熱します。水の量・火の強さ・あたためる時間を変えて、あたためたあとの水の温度を温度計ではかります。',
   variables: [
     { key: 'water', kind: 'range', label: '水(みず)の量(りょう)', min: 50, max: 200, step: 50, unit: 'mL', initial: 100 },
     {

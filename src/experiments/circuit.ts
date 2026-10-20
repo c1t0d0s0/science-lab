@@ -112,6 +112,7 @@ export const circuit: Experiment = {
   id: 'circuit',
   label: '電気(でんき)の通(とお)り道(みち)',
   summary: 'かん電池・豆電球・スイッチをつないで、明かりがつくつなぎ方を調べよう',
+  setup: 'かん電池(でんち)・豆電球(まめでんきゅう)・スイッチを、どう線でつないだ回路(かいろ)です。回路のとちゅうに物をはさんだり、かん電池の数やつなぎ方を変えたりして、豆電球に明かりがつくかを調べます。',
   variables: [
     { key: 'gap', kind: 'choice', label: '回路(かいろ)のとちゅうにつなぐ物(もの)', options: GAP, initial: 'wire' },
     {

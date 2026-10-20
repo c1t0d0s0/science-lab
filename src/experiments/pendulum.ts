@@ -58,6 +58,7 @@ export const pendulum: Experiment = {
   id: 'pendulum',
   label: 'ふりこのきまり',
   summary: 'ふりこの長さ・おもりの重さ・ふれはばを変えて、1往復する時間を調べよう',
+  setup: '糸(いと)におもりをつるしたふりこです。おもりを横に引いて（引いた角度がふれはば）手をはなし、10往復する時間をストップウォッチではかって、10でわって1往復の時間を求めます。',
   variables: [
     { key: 'length', kind: 'range', label: 'ふりこの長(なが)さ', min: 20, max: 140, step: 10, unit: 'cm', initial: 50 },
     { key: 'mass', kind: 'range', label: 'おもりの重(おも)さ', min: 10, max: 50, step: 10, unit: 'g', initial: 20 },

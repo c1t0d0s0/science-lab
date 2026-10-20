@@ -123,6 +123,7 @@ export function renderLab(root: HTMLElement, level: Level, mission: Mission, opt
     return h(
       'section',
       { class: 'mission-q card' },
+      setupBox(exp, level, initialConditions(exp, mission.start)),
       h('p', { class: 'card-kicker' }, withRuby('span', '', `${t.question}`), h('span', { class: 'chip chip-small' }, ...[withRuby('span', '', modeLabel(level))])),
       withRuby('h2', 'mission-text', mission.question),
     );
@@ -500,6 +501,22 @@ export function renderLab(root: HTMLElement, level: Level, mission: Mission, opt
   return () => {
     alive = false;
   };
+}
+
+/** 実験のしかた。問いの前提として、道具のつなぎ方・置き方と、何をはかるかを、図といっしょに出す */
+export function setupBox(exp: Experiment, level: Level, c: Conditions): HTMLElement {
+  const low = GRADE[level] <= 2;
+  return h(
+    'div',
+    { class: 'setup' },
+    h('div', { class: 'setup-fig', 'aria-hidden': 'true' }, figure(exp.scene(c, null, 0))),
+    h(
+      'div',
+      { class: 'setup-text' },
+      withRuby('p', 'setup-title', low ? 'じっけんの しかた' : '実験(じっけん)のしかた'),
+      withRuby('p', '', low && exp.kanaSetup ? exp.kanaSetup : exp.setup),
+    ),
+  );
 }
 
 /** 実験の一覧などに出す、実験の小さな絵 */

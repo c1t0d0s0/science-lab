@@ -57,6 +57,8 @@ export const float: Experiment = {
   kana: 'うく もの・しずむ もの',
   summary: 'いろいろな物を水に入れて、うくか しずむか 調べよう',
   kanaSummary: 'いろいろな ものを みずに いれてみよう',
+  setup: '水を入れた水そうに、物をそっと入れます。水にうくか、しずむかを調べます。',
+  kanaSetup: 'みずを いれた すいそうに、ものを そっと いれるよ。うくか しずむか みてみよう。',
   variables: [{ key: 'object', kind: 'choice', label: '水(みず)に入(い)れる物(もの)', kana: 'みずに いれる もの', options: THINGS, initial: 'block' }],
   measure: {
     kind: 'category',

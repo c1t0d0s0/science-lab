@@ -53,6 +53,7 @@ export const electromagnet: Experiment = {
   id: 'electromagnet',
   label: '電磁石(でんじしゃく)の強(つよ)さ',
   summary: 'コイルの巻き数・電流の大きさ・鉄しんを変えて、電磁石の強さを調べよう',
+  setup: '鉄しん（鉄のくぎ）にどう線を巻(ま)いてコイルを作り、かん電池につなぐと電磁石(でんじしゃく)になります。電磁石のはしに、いくつクリップが引きつけられるかで強さをくらべます。どう線の長さはどれも同じです。',
   variables: [
     { key: 'turns', kind: 'range', label: 'コイルの巻(ま)き数(すう)', min: 50, max: 200, step: 50, unit: '回', initial: 100 },
     { key: 'batteries', kind: 'range', label: 'かん電池(でんち)（直列(ちょくれつ)）', min: 1, max: 2, step: 1, unit: 'こ', initial: 1 },

@@ -1314,6 +1314,41 @@ rt {
   background: var(--mark);
 }
 
+/* 実験のしかた (問いの前提) */
+.setup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem 1rem;
+  margin: 0.2rem 0 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.6rem;
+  background: var(--blue-soft);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+
+@media (min-width: 40rem) {
+  .setup {
+    grid-template-columns: 12rem minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+.setup-fig {
+  max-width: 14rem;
+  padding: 0.25rem;
+  border-radius: 0.4rem;
+  background: var(--paper);
+}
+
+.setup-fig .fig {
+  width: 100%;
+}
+
+.setup-title {
+  font-weight: 700;
+}
+
 /* 予想・ふりかえりの選択肢 */
 .answer-choices,
 .reason-choices {

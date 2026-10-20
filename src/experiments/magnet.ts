@@ -103,6 +103,8 @@ export const magnet: Experiment = {
   kana: 'じしゃくに つくもの',
   summary: 'いろいろな物を磁石に近づけて、つくもの・つかないものを調べよう',
   kanaSummary: 'いろいろな ものを じしゃくに ちかづけてみよう',
+  setup: '棒磁石(ぼうじしゃく)をひもでつるし、その下に物を置きます。物を磁石に近づけて、引(ひ)きつけられるか（つくか）を調べます。',
+  kanaSetup: 'ぼうじしゃくを ひもで つるして、その したに ものを おくよ。じしゃくに つくか しらべよう。',
   variables: [
     { key: 'object', kind: 'choice', label: '近(ちか)づける物(もの)', kana: 'ちかづける もの', options: THINGS, initial: 'clip' },
     { key: 'distance', kind: 'range', label: '磁石(じしゃく)とのきょり', min: 0, max: 5, step: 1, unit: 'cm', initial: 0 },
